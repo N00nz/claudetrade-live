@@ -1,0 +1,2354 @@
+{
+ "generated": "2026-10-19 22:05 Eastern Daylight Time",
+ "firm": {
+  "name": "Baller Funds",
+  "city": "New York",
+  "tagline": "Quant desk for Nasdaq-100 and gold futures"
+ },
+ "research": {
+  "stamp": "Updated 2026-10-19 \u00b7 entry #33 \u00b7 Mandate 2 \u00b7 five markets ranked \u00b7 paper book on Alpaca",
+  "status": {
+   "now": {
+    "title": "Mandate 2 ranked: H13 in QQQ is the only per-trade edge; the overnight premium is the robust carry (QQQ + GLD book); crypto has no retail-cost edge",
+    "note": "A: H13 filtered. B: H13 + first-hour conviction. C: H1 at 15m. D: gold Asia (research only). E: the Tradeify account spec with $500 fixed-dollar risk. Review each at 30 trades (EV above zero, PF at least 1.20), then at 60 against the full gates. No tuning while they run."
+   },
+   "next": {
+    "title": "Paper book: sleeve A (H13 in QQQ) plus sleeve B (overnight QQQ + GLD); Windows runs the jobs; 30-trade review of A",
+    "note": "Conviction days only, stop 0.375 x daily ATR, half off at +1R, rest at the 16:00 close, sized at $500 risk (1 to 4 MNQ; 2 only when the stop is 125 points or less). Bootstrap: 69% pass, 10% fail, median 68 sessions. Open: confirm the drawdown-lock level and the 40% consistency figure on the Tradeify dashboard."
+   },
+   "candidates": {
+    "title": "1 of 19 families per trade (H13); overnight book passes 4 of 5 drift gates",
+    "note": "H13 with the magnitude filter clears every gate and the neighbors, but 10 of its 209 trades carry 84% of the profit and the holdout CI spans zero. Forward test and the evaluation account, not live capital."
+   }
+  },
+  "gates": [
+   {
+    "k": "Expectancy, net of costs",
+    "v": "\u2265 +0.10R, CI > 0"
+   },
+   {
+    "k": "Profit factor, selection",
+    "v": "\u2265 1.30"
+   },
+   {
+    "k": "Trades, selection",
+    "v": "\u2265 100"
+   },
+   {
+    "k": "Walk-forward blocks positive",
+    "v": "\u2265 2 / 3"
+   },
+   {
+    "k": "Holdout, one look",
+    "v": "EV > 0, PF \u2265 1.20"
+   },
+   {
+    "k": "Frequency",
+    "v": "2 to 5 / week"
+   },
+   {
+    "k": "Max drawdown, selection",
+    "v": "\u2264 15R"
+   },
+   {
+    "k": "Parameter neighbors (\u00b125%)",
+    "v": "same sign"
+   }
+  ],
+  "hypotheses": [
+   {
+    "id": "H1",
+    "name": "NQ shows intraday momentum: the first 30 min (and first hour) return predicts the last 30 min",
+    "rule": "At 15:30 ET trade in the direction of the 09:30 to 10:00 return, exit 16:00, stop k x ATR. Magnitude filter to cut weak days.",
+    "freq": "1/day raw, 2 to 3/wk filtered",
+    "status": "promising, unproven; Track C",
+    "level": "warn"
+   },
+   {
+    "id": "H2",
+    "name": "The 5-minute ORB survives NQ costs",
+    "rule": "First 5-min candle sets direction, enter 09:35, stop at the other side of the candle, target 10R or 16:00.",
+    "freq": "up to 1/day, filters reduce it",
+    "status": "fail, retired on free data",
+    "level": "bad"
+   },
+   {
+    "id": "H3",
+    "name": "Overnight drift is capturable",
+    "rule": "Long at RTH close, exit at next RTH open. Conditional versions: after a down RTH day, around the European open.",
+    "freq": "daily raw, 2 to 4/wk filtered",
+    "status": "primary fails; unconditional borderline, parked",
+    "level": "warn"
+   },
+   {
+    "id": "H4",
+    "name": "Open-gap mean reversion",
+    "rule": "Open beyond the prior-day range by more than x ATR: fade toward the range edge, stop beyond the gap extreme.",
+    "freq": "1 to 3/wk",
+    "status": "fail, retired",
+    "level": "bad"
+   },
+   {
+    "id": "H8",
+    "name": "First-hour range breakout holds to the close",
+    "rule": "09:00 bar range; first 1H close beyond it (10:00 to 12:00) sets direction; stop other side; exit 16:00.",
+    "freq": "3 to 4/wk",
+    "status": "fail, retired (third ORB failure)",
+    "level": "bad"
+   },
+   {
+    "id": "H9",
+    "name": "A big morning move continues into the afternoon",
+    "rule": "At 13:00, if the 09:00-to-12:00 move is at least 0.5 daily ATR, continue; stop 0.5 ATR; exit 16:00.",
+    "freq": "1 to 2/wk",
+    "status": "fail, retired",
+    "level": "bad"
+   },
+   {
+    "id": "H10",
+    "name": "A big 1H bar mean-reverts",
+    "rule": "Fade any 10:00 to 14:00 bar with a body of at least 1.0 ATR; stop at its extreme; target its midpoint.",
+    "freq": "2 to 4/wk",
+    "status": "fail hard, retired",
+    "level": "bad"
+   },
+   {
+    "id": "H13",
+    "name": "NQ's first-hour return relative to ES predicts the rest of the day",
+    "rule": "rs = NQ minus ES return over the 09:00 bar. If |rs| is above its 60-session median, trade sign(rs) at 10:00, stop 0.5 daily ATR, exit 16:00.",
+    "freq": "2.3/wk",
+    "status": "passed gates; Tracks A, B, E",
+    "level": "good"
+   },
+   {
+    "id": "H14",
+    "name": "H13 days can be entered better than at 10:00 with a wide stop",
+    "rule": "Wait for a pullback bar, stop at its extreme; or enter on continuation beyond the first-hour range.",
+    "freq": "1.4 to 2.3/wk",
+    "status": "fail: the wide stop is the mechanism",
+    "level": "bad"
+   },
+   {
+    "id": "H16",
+    "name": "The days H13 skips (quiet first hour) have an edge of their own",
+    "rule": "Fade or follow the first hour at 10:00; or fade a range-edge reclaim.",
+    "freq": "2.4/wk",
+    "status": "fail: nothing either way",
+    "level": "bad"
+   },
+   {
+    "id": "H15",
+    "name": "European-open momentum stacks with H13 in a different window",
+    "rule": "Sign of the 03:00 ET bar, filtered, stop 0.5 ATR, exit at the 09:00 open.",
+    "freq": "2.4/wk",
+    "status": "fail: EV zero, uncorrelated",
+    "level": "bad"
+   },
+   {
+    "id": "H17",
+    "name": "Management rules improve H13",
+    "rule": "Time break-even at 13:00; half off at +1R; cut losers at 13:00.",
+    "freq": "overlay",
+    "status": "half off at +1R: same EV, less tail",
+    "level": "info"
+   },
+   {
+    "id": "H19",
+    "name": "FOMC pre-announcement drift (Lucca and Moench 2015) shows on NQ",
+    "rule": "Long at 14:00 the day before a scheduled announcement, exit at the 13:00 close on the day, stop 1.0 x daily ATR. Holds overnight.",
+    "freq": "8/yr",
+    "status": "read: +0.21R on 20 meetings; overnight hold, research track G",
+    "level": "info"
+   },
+   {
+    "id": "H20",
+    "name": "Turn of the month is capturable on NQ",
+    "rule": "Long at the close of the second-to-last session of the month, exit at the close of the third session of the next; stop 1.0 ATR.",
+    "freq": "12/yr",
+    "status": "fail, retired (stop removes the drift)",
+    "level": "bad"
+   },
+   {
+    "id": "H21",
+    "name": "H13's edge concentrates in month-turn sessions",
+    "rule": "Turn (last 2 + first 3 sessions) versus mid-month on every signal window; blocks; longs versus shorts.",
+    "freq": "overlay read",
+    "status": "consistent but underpowered; CI of the gap includes 0; recheck at 60 forward trades",
+    "level": "muted"
+   },
+   {
+    "id": "E1",
+    "name": "H13 built from the ETFs themselves (QQQ versus SPY over the 09:30 bar)",
+    "rule": "Enter QQQ at 10:30 in the direction of the first-hour relative strength, stop 0.5 x daily ATR, exit 16:00.",
+    "freq": "2.4/wk",
+    "status": "fail: the window moves into the session and the signal is gone",
+    "level": "bad"
+   },
+   {
+    "id": "E1b",
+    "name": "The futures signal (NQ minus ES, 09:00 bar) executed in QQQ",
+    "rule": "Track A's rule, QQQ market order at 10:00, stop 0.5 x QQQ daily ATR14, flat at 15:58. Costs $0.02 a share.",
+    "freq": "2.3/wk",
+    "status": "carries over: just under the gates in selection, holdout +0.19R on 56; Alpaca paper bot",
+    "level": "warn"
+   },
+   {
+    "id": "E2",
+    "name": "Last-half-hour momentum on the ETFs (Gao, Han, Li, Zhou)",
+    "rule": "First-hour sign, trade 15:30 to 16:00, stop 1.0 x ATR14 (1H).",
+    "freq": "5/wk",
+    "status": "fail on QQQ and SPY 2023 to 2026, retired",
+    "level": "bad"
+   },
+   {
+    "id": "E3",
+    "name": "Overnight drift is capturable in ETFs",
+    "rule": "Long at the close, out at the next open, no stop; R = daily ATR14.",
+    "freq": "5/wk",
+    "status": "real: +5 bps a night on QQQ since 1999, +0.06R a trade; overlay question",
+    "level": "info"
+   },
+   {
+    "id": "F1",
+    "name": "Overnight drift in ETFs: QQQ, SPY, GLD, IBIT, ETHA",
+    "rule": "Buy the 16:00 close, sell the next 09:30 open, every session; $0.02 a share; drift gates (Sharpe, t, years, holdout, MDD).",
+    "freq": "5/wk",
+    "status": "real: QQQ t 4.5 Sharpe 0.88, GLD t 3.4; crypto ETFs failed holdout; QQQ+GLD book Sharpe 1.07",
+    "level": "warn"
+   },
+   {
+    "id": "F3",
+    "name": "Crypto time-series momentum in spot (Liu and Tsyvinski)",
+    "rule": "Long BTC/ETH when the past 7-day return is positive, flat otherwise; 0.45% a switch; 28-day secondary.",
+    "freq": "weekly",
+    "status": "7-day fails (fees); 28-day only matches buy-and-hold with less drawdown; not adopted",
+    "level": "bad"
+   },
+   {
+    "id": "R1",
+    "name": "Reads: BTC 16-18 ET window, ETHA-vs-IBIT first hour, FOMC-day intraday",
+    "rule": "Measured, no rule.",
+    "freq": "\u2014",
+    "status": "BTC window +7.7 bps gross, cost-prohibited; ETF relative strength nothing; FOMC day negative",
+    "level": "muted"
+   },
+   {
+    "id": "H5",
+    "name": "A volatility regime gate improves whatever passes",
+    "rule": "ATR percentile band as an overlay.",
+    "freq": "overlay",
+    "status": "read: edge sits in the higher-vol half",
+    "level": "info"
+   },
+   {
+    "id": "H6",
+    "name": "Stop management: when does break-even help",
+    "rule": "MFE/MAE path analysis on the winner, rules pre-registered before replay.",
+    "freq": "overlay",
+    "status": "measured: profit-based BE hurts; time-based BE neutral (+0.009R), not adopted",
+    "level": "info"
+   },
+   {
+    "id": "H7",
+    "name": "Order-flow proxy as a filter",
+    "rule": "Lower-timeframe up/down volume delta over each 15m bar.",
+    "freq": "overlay",
+    "status": "parked: not enough free 5m data",
+    "level": "muted"
+   }
+  ],
+  "results": [
+   {
+    "test": "H1, 15m: first 30 min from prior close sets direction, trade 15:30 to 16:00, stop 1.0 ATR. Paper rule, nothing tuned.",
+    "window": "2026-03-02 to 2026-10-13",
+    "n": "157",
+    "ev": "+0.12 [-0.02, +0.26]",
+    "pf": "1.39",
+    "wf": "3/3",
+    "per_week": "5.0",
+    "gate": "CI includes 0",
+    "level": "warn"
+   },
+   {
+    "test": "H1, 15m with agreement filter: 15:00 to 15:30 return must agree",
+    "window": "same window",
+    "n": "80",
+    "ev": "+0.09 [-0.11, +0.29]",
+    "pf": "1.28",
+    "wf": "2/3",
+    "per_week": "2.6",
+    "gate": "N < 100",
+    "level": "warn"
+   },
+   {
+    "test": "H1, 1H proxy: same predictor, trade the last hour",
+    "window": "selection 2024-05-23 to 2026-03-31",
+    "n": "451",
+    "ev": "-0.03",
+    "pf": "0.92",
+    "wf": "1/3",
+    "per_week": "5.0",
+    "gate": "fail, retired",
+    "level": "bad"
+   },
+   {
+    "test": "H1, 1H proxy holdout (one look; a rule that fails selection is not rescued by it)",
+    "window": "2026-04-01 to 2026-10-13",
+    "n": "135",
+    "ev": "+0.10",
+    "pf": "1.48",
+    "wf": "-",
+    "per_week": "5.0",
+    "gate": "n/a",
+    "level": "muted"
+   },
+   {
+    "test": "H2, 5-min ORB, paper rule (10R target), selection",
+    "window": "2026-03-02 to 2026-05-07",
+    "n": "48",
+    "ev": "-0.34 [-0.73, +0.10]",
+    "pf": "0.58",
+    "wf": "1/3",
+    "per_week": "5.0",
+    "gate": "fail, retired",
+    "level": "bad"
+   },
+   {
+    "test": "H2 holdout, one look (not a rescue: the rule failed selection; 3R target EV +0.27 was seen after the fact)",
+    "window": "2026-08-06 to 2026-10-13",
+    "n": "48",
+    "ev": "+0.08 [-0.41, +0.69]",
+    "pf": "1.12",
+    "wf": "-",
+    "per_week": "5.0",
+    "gate": "n/a",
+    "level": "muted"
+   },
+   {
+    "test": "H3 primary: long overnight after a down day, stop 0.5 daily ATR, exit 09:00",
+    "window": "selection 2024-04-22 to 2026-03-31",
+    "n": "200",
+    "ev": "+0.05 [-0.06, +0.16]",
+    "pf": "1.15",
+    "wf": "2/3",
+    "per_week": "2.1",
+    "gate": "fail",
+    "level": "bad"
+   },
+   {
+    "test": "H3 secondary: long every night, same stop and exit. Holdout N=134, EV +0.09, PF 1.31.",
+    "window": "selection 2024-04-22 to 2026-03-31",
+    "n": "477",
+    "ev": "+0.07 [+0.01, +0.14]",
+    "pf": "1.28",
+    "wf": "3/3",
+    "per_week": "5.0",
+    "gate": "below EV and PF gates; not a day trade",
+    "level": "warn"
+   },
+   {
+    "test": "H13 filtered: sign(NQ minus ES first-hour return) when |rs| is above its 60-session median, stop 0.5 ATR, exit 16:00. Selection.",
+    "window": "2024-05-23 to 2026-03-31",
+    "n": "209",
+    "ev": "+0.12 [+0.01, +0.24]",
+    "pf": "1.42",
+    "wf": "3/3",
+    "per_week": "2.3",
+    "gate": "pass",
+    "level": "good"
+   },
+   {
+    "test": "H13 filtered, holdout, one look. Spent.",
+    "window": "2026-04-01 to 2026-09-11",
+    "n": "47",
+    "ev": "+0.08 [-0.15, +0.32]",
+    "pf": "1.30",
+    "wf": "-",
+    "per_week": "2.1",
+    "gate": "pass (EV > 0, PF \u2265 1.20)",
+    "level": "good"
+   },
+   {
+    "test": "H13 diagnostics: neighbors all positive; NQ's own first-hour return with the same filter gives EV +0.09, PF 1.31 (ES adds a little); top 10 trades = 84% of R; 2025H2 negative.",
+    "window": "selection",
+    "n": "209",
+    "ev": "+0.02 without top 10",
+    "pf": "-",
+    "wf": "-",
+    "per_week": "-",
+    "gate": "fragile",
+    "level": "warn"
+   },
+   {
+    "test": "H13 filtered + O3 conviction (09:00 bar closes in the outer third of its range). In-sample overlay, holdout spent. Track B.",
+    "window": "selection",
+    "n": "165",
+    "ev": "+0.18 [+0.06, +0.31]",
+    "pf": "1.73",
+    "wf": "3/3",
+    "per_week": "1.8",
+    "gate": "in-sample only; forward test",
+    "level": "warn"
+   },
+   {
+    "test": "H13 filtered, vol regime split: ATR percentile above 50 vs at or below 50",
+    "window": "selection",
+    "n": "153 / 56",
+    "ev": "+0.18 / -0.04",
+    "pf": "1.69 / 0.90",
+    "wf": "3/3 / 1/3",
+    "per_week": "1.7 / 0.6",
+    "gate": "read only, not applied",
+    "level": "info"
+   },
+   {
+    "test": "H14 pullback entry on H13 days (stop at the pullback bar's extreme)",
+    "window": "selection",
+    "n": "169",
+    "ev": "-0.25 [-0.55, +0.12]",
+    "pf": "0.70",
+    "wf": "0/3",
+    "per_week": "1.9",
+    "gate": "fail: 79% stopped",
+    "level": "bad"
+   },
+   {
+    "test": "H16 quiet-day contrarian / continuation (10:00 entry, stop 0.5 ATR)",
+    "window": "selection",
+    "n": "212 / 212",
+    "ev": "+0.02 / +0.04",
+    "pf": "1.05 / 1.13",
+    "wf": "2/3 / 3/3",
+    "per_week": "2.4",
+    "gate": "fail: no edge",
+    "level": "bad"
+   },
+   {
+    "test": "H15 European-open momentum, primary",
+    "window": "selection / holdout",
+    "n": "217 / 56",
+    "ev": "-0.01 / +0.03",
+    "pf": "0.95 / 1.16",
+    "wf": "1/3",
+    "per_week": "2.4",
+    "gate": "fail, retired",
+    "level": "bad"
+   },
+   {
+    "test": "H17 M2: H13 base with half off at +1R, rest at the close (in-sample)",
+    "window": "selection",
+    "n": "209",
+    "ev": "+0.12 [+0.02, +0.23]",
+    "pf": "1.43",
+    "wf": "3/3",
+    "per_week": "2.3",
+    "gate": "top-10 share 62% vs 84%; MDD 8.8R",
+    "level": "info"
+   },
+   {
+    "test": "Account spec: H13 conviction days, stop 0.375 ATR, half off at +1R (in-sample). Historical max DD 890 pts = $1,780 per MNQ.",
+    "window": "selection",
+    "n": "165",
+    "ev": "+0.24",
+    "pf": "1.83",
+    "wf": "3/3",
+    "per_week": "1.8",
+    "gate": "in-sample; Track E forward",
+    "level": "warn"
+   },
+   {
+    "test": "Select 50K evaluation bootstrap of the account spec (EOD trailing $2,000, $3,000 target, 40% consistency): 1 MNQ pass 60% / fail 4% / median 79 sessions; staged 1 then 2 MNQ at $51k: 70% / 9% / 61; 2 MNQ: 75% / 24% / 40",
+    "window": "10k paths",
+    "n": "-",
+    "ev": "$71 per trade at 1 MNQ",
+    "pf": "-",
+    "wf": "-",
+    "per_week": "1.8",
+    "gate": "sizing",
+    "level": "info"
+   },
+   {
+    "test": "Sizing policies on the account spec: fixed 1 MNQ 60% pass / 4% fail / 79 sessions; $500 constant-dollar risk (2 MNQ only when the stop is 125 pts or less) 69% / 10% / 68; 25% of buffer 65% / 5% / 69; fixed 2 MNQ 75% / 23% / 39. Signal-strength sizing dropped: EV is not monotone in |rs|.",
+    "window": "10k paths",
+    "n": "-",
+    "ev": "-",
+    "pf": "-",
+    "wf": "-",
+    "per_week": "1.8",
+    "gate": "chosen: $500 fixed-dollar risk (#20)",
+    "level": "good"
+   },
+   {
+    "test": "Stop curve on the account spec: 0.25 / 0.30 / 0.375 / 0.5 ATR give EV +0.21 / +0.21 / +0.24 / +0.18R. Bumpy: read the edge as the 0.25 to 0.5 band, not the 0.375 point. Half-off at +0.75R / +1R / +1.5R / none: +0.21 / +0.24 / +0.24 / +0.23R. No tweak adopted.",
+    "window": "selection",
+    "n": "165",
+    "ev": "-",
+    "pf": "-",
+    "wf": "-",
+    "per_week": "-",
+    "gate": "robustness read",
+    "level": "muted"
+   },
+   {
+    "test": "Gold Asia spec forced flat at the 16:00 ET bar (Tradeify rule)",
+    "window": "selection / holdout",
+    "n": "315 / 82",
+    "ev": "+0.01 / -0.03",
+    "pf": "1.05 / 0.90",
+    "wf": "5/8",
+    "per_week": "-",
+    "gate": "edge needs the multi-day hold",
+    "level": "bad"
+   },
+   {
+    "test": "H13 unfiltered (every day)",
+    "window": "selection / holdout",
+    "n": "451 / 113",
+    "ev": "+0.09 / -0.02",
+    "pf": "1.32 / 0.94",
+    "wf": "3/3",
+    "per_week": "5.0",
+    "gate": "fails holdout",
+    "level": "bad"
+   },
+   {
+    "test": "H4 gap fade, primary: |overnight move| at least 0.5 ATR, fade toward the prior close, stop beyond the overnight extreme",
+    "window": "selection / holdout",
+    "n": "90 / 31",
+    "ev": "-0.03 / -0.29",
+    "pf": "0.95 / 0.56",
+    "wf": "2/3",
+    "per_week": "1.0",
+    "gate": "fail, retired",
+    "level": "bad"
+   },
+   {
+    "test": "H8 first-hour breakout, primary",
+    "window": "selection / holdout",
+    "n": "355 / 99",
+    "ev": "+0.03 / -0.04",
+    "pf": "1.12 / 0.82",
+    "wf": "2/3",
+    "per_week": "3.9",
+    "gate": "fail, retired",
+    "level": "bad"
+   },
+   {
+    "test": "H9 midday continuation, primary",
+    "window": "selection / holdout",
+    "n": "114 / 22",
+    "ev": "+0.10 / -0.05",
+    "pf": "1.52 / 0.79",
+    "wf": "2/3",
+    "per_week": "1.3",
+    "gate": "fail, retired",
+    "level": "bad"
+   },
+   {
+    "test": "H10 1H mean reversion, primary (multi-trade)",
+    "window": "selection / holdout",
+    "n": "439 / 112",
+    "ev": "-0.35 / -0.46",
+    "pf": "0.59 / 0.43",
+    "wf": "0/3",
+    "per_week": "4.9",
+    "gate": "fail hard, retired",
+    "level": "bad"
+   },
+   {
+    "test": "Prior work: 15m PDHL fade, fresh out-of-sample",
+    "window": "60 days to 2026-07-15",
+    "n": "38",
+    "ev": "-0.35",
+    "pf": "0.39",
+    "wf": "-",
+    "per_week": "4.5",
+    "gate": "fail, retired",
+    "level": "bad"
+   },
+   {
+    "test": "Prior work: 15m ORB with pre-open bias gate, holdout",
+    "window": "2026-07-16 to 2026-09-11",
+    "n": "12",
+    "ev": "-0.23",
+    "pf": "0.44",
+    "wf": "-",
+    "per_week": "1.5",
+    "gate": "fail, retired",
+    "level": "bad"
+   },
+   {
+    "test": "H13 signal-window map (B4.1): the 09:00 bar versus pre-market, 08:00, two-hour and 10:00-only windows, same execution",
+    "window": "selection",
+    "n": "209 / 207",
+    "ev": "+0.12 (V1) / -0.08 (V5)",
+    "pf": "1.42 / 0.77",
+    "wf": "3/3 / 1/3",
+    "per_week": "2.3",
+    "gate": "read: opening hour only",
+    "level": "warn"
+   },
+   {
+    "test": "H13 exit hour (B4.3): the same trades exited at 14:00 instead of 16:00",
+    "window": "selection",
+    "n": "209",
+    "ev": "+0.15 [+0.05, +0.26] vs +0.12",
+    "pf": "1.65 vs 1.42",
+    "wf": "3/3",
+    "per_week": "2.3",
+    "gate": "best of 5 looks; forward comparison pre-registered",
+    "level": "info"
+   },
+   {
+    "test": "H13 time-based break-even (B4.3 PRIMARY): stop to entry at 13:00 if at least +0.5R",
+    "window": "selection",
+    "n": "209",
+    "ev": "+0.13 [+0.02, +0.24]",
+    "pf": "1.48",
+    "wf": "3/3",
+    "per_week": "2.3",
+    "gate": "+0.009R, not adopted",
+    "level": "muted"
+   },
+   {
+    "test": "H19 FOMC drift, 1H: 14:00 the day before to the 13:00 close on the day, stop 1.0 ATR; post-announcement control -0.21R",
+    "window": "2024-05 to 2026-09, 20 meetings",
+    "n": "20",
+    "ev": "+0.21 [-0.03, +0.47]",
+    "pf": "2.88",
+    "wf": "-",
+    "per_week": "0.1",
+    "gate": "read; overnight hold; track G",
+    "level": "info"
+   },
+   {
+    "test": "H19 FOMC daily: close the day before to close on the day, versus every other day, 1.0 ATR stop",
+    "window": "2021 to 2026",
+    "n": "46 / 1408",
+    "ev": "+0.13 / +0.03",
+    "pf": "1.54 / 1.11",
+    "wf": "-",
+    "per_week": "0.2",
+    "gate": "consistent with the literature",
+    "level": "info"
+   },
+   {
+    "test": "H20 turn of the month, primary: four-session hold, 1.0 ATR stop (no stop: +0.12R, CI includes 0)",
+    "window": "2000 to 2026",
+    "n": "313",
+    "ev": "+0.01 [-0.12, +0.13]",
+    "pf": "1.01",
+    "wf": "1/3",
+    "per_week": "0.2",
+    "gate": "fail, retired",
+    "level": "bad"
+   },
+   {
+    "test": "H21 month-turn versus mid-month sessions on H13 filtered (gap positive in 3/3 blocks, both sides)",
+    "window": "selection",
+    "n": "57 / 152",
+    "ev": "+0.27 / +0.07 (gap CI [-0.06, +0.46])",
+    "pf": "2.10 / 1.22",
+    "wf": "3/3",
+    "per_week": "0.6 / 1.7",
+    "gate": "map noise by the rule; recheck forward",
+    "level": "muted"
+   },
+   {
+    "test": "E1 H13-ETF primary: QQQ vs SPY first-hour relative strength, entry 10:30, stop 0.5 ATR, exit 16:00",
+    "window": "2023-11-21 to 2026-03-31",
+    "n": "282",
+    "ev": "+0.00 [-0.09, +0.11]",
+    "pf": "1.01",
+    "wf": "1/3",
+    "per_week": "2.4",
+    "gate": "fail",
+    "level": "bad"
+   },
+   {
+    "test": "E1b futures signal executed in QQQ at the 10:30 bar open (Track A's rule)",
+    "window": "selection 2024-05-22 to 2026-03-31",
+    "n": "212",
+    "ev": "+0.09 [-0.03, +0.21]",
+    "pf": "1.29",
+    "wf": "3/3",
+    "per_week": "2.3",
+    "gate": "0.01 under EV and PF",
+    "level": "warn"
+   },
+   {
+    "test": "E1b holdout, one look",
+    "window": "2026-04-01 to 2026-10-19",
+    "n": "56",
+    "ev": "+0.19 [-0.04, +0.43]",
+    "pf": "1.83",
+    "wf": "-",
+    "per_week": "2.0",
+    "gate": "EV > 0, PF \u2265 1.20",
+    "level": "good"
+   },
+   {
+    "test": "E1c read: futures signal, QQQ entry at the 10:00 bar open on 15m bars",
+    "window": "60 sessions to 2026-10-19",
+    "n": "27",
+    "ev": "+0.15 [-0.14, +0.47]",
+    "pf": "1.68",
+    "wf": "-",
+    "per_week": "2.3",
+    "gate": "N",
+    "level": "muted"
+   },
+   {
+    "test": "E2 H1-ETF primary on QQQ (first-hour sign, 15:30 to 16:00, stop 1.0 ATR 1H); SPY the same; holdouts flat",
+    "window": "2023-11-21 to 2026-03-31",
+    "n": "581",
+    "ev": "-0.02 [-0.06, +0.02]",
+    "pf": "0.90",
+    "wf": "2/3",
+    "per_week": "5.0",
+    "gate": "fail, retired",
+    "level": "bad"
+   },
+   {
+    "test": "E3 QQQ overnight on 1H: close to next open, no stop, R = daily ATR (holdout +0.05R, PF 1.29)",
+    "window": "2023-11-21 to 2026-03-31",
+    "n": "580",
+    "ev": "+0.06 [+0.02, +0.10]",
+    "pf": "1.39",
+    "wf": "3/3",
+    "per_week": "5.0",
+    "gate": "real, under the EV gate",
+    "level": "info"
+   },
+   {
+    "test": "E3 daily: QQQ overnight vs intraday since 1999 (SPY since 1993 the same sign)",
+    "window": "1999-03 to 2026-10",
+    "n": "6945",
+    "ev": "+0.015 vs -0.015 per day",
+    "pf": "1.11 vs 0.94",
+    "wf": "4/5 blocks",
+    "per_week": "5.0",
+    "gate": "t 3.1 vs -2.0",
+    "level": "info"
+   },
+   {
+    "test": "F1 QQQ overnight (buy close, sell next open): +5.0 bps a night, Sharpe 0.88, 81% of years; intraday control -0.4 bps; buy-and-hold Sharpe 0.48",
+    "window": "1999 to 2025-10; holdout 12 mo",
+    "n": "6694",
+    "ev": "t 4.5 \u00b7 hold Sharpe 1.23",
+    "pf": "\u2014",
+    "wf": "81% yrs",
+    "per_week": "5.0",
+    "gate": "Sharpe 0.88",
+    "level": "warn"
+   },
+   {
+    "test": "F1 GLD overnight: +3.7 bps a night, Sharpe 0.75; intraday -0.03 bps (nothing)",
+    "window": "2004 to 2025-10; holdout 12 mo",
+    "n": "5261",
+    "ev": "t 3.4 \u00b7 hold Sharpe 0.74",
+    "pf": "\u2014",
+    "wf": "73% yrs",
+    "per_week": "5.0",
+    "gate": "Sharpe 0.75",
+    "level": "warn"
+   },
+   {
+    "test": "F1 SPY overnight: +3.0 bps, Sharpe 0.71 (skip Friday 0.85); buy-and-hold 0.54",
+    "window": "1993 to 2025-10",
+    "n": "8236",
+    "ev": "t 4.1 \u00b7 hold Sharpe 1.56",
+    "pf": "\u2014",
+    "wf": "85% yrs",
+    "per_week": "5.0",
+    "gate": "Sharpe 0.71",
+    "level": "warn"
+   },
+   {
+    "test": "F1 IBIT overnight: +24.7 bps, Sharpe 1.59 in selection, then -5.5 bps in the holdout; ETHA the same",
+    "window": "2024-01 to 2025-10; holdout 12 mo",
+    "n": "443",
+    "ev": "t 2.1 \u00b7 hold Sharpe -0.42",
+    "pf": "\u2014",
+    "wf": "\u2014",
+    "per_week": "5.0",
+    "gate": "failed holdout",
+    "level": "bad"
+   },
+   {
+    "test": "F1 book: QQQ + GLD overnight, equal weight: +3.8 bps, Sharpe 1.07, +9.7% a year, log MDD 22%",
+    "window": "2004 to 2025-10; holdout 12 mo",
+    "n": "5261",
+    "ev": "t 4.9 \u00b7 hold Sharpe 1.05",
+    "pf": "\u2014",
+    "wf": "82% yrs",
+    "per_week": "5.0",
+    "gate": "4 of 5 gates (MDD as written)",
+    "level": "good"
+   },
+   {
+    "test": "F3 BTC TSMOM 7-day long/flat in spot (primary) vs buy-and-hold Sharpe 0.90; 28-day secondary Sharpe 0.98, holdout +0.2 vs -5.7 bps",
+    "window": "2014 to 2025-10",
+    "n": "4043",
+    "ev": "Sharpe 0.54",
+    "pf": "\u2014",
+    "wf": "75% yrs",
+    "per_week": "\u2014",
+    "gate": "fail (62 switches a year)",
+    "level": "bad"
+   }
+  ],
+  "decisions": [
+   "2026-10-14 Alpaca removed: no futures. TradingView stays the chart and forward-test venue; IBKR paper is the broker-realistic option if routing is needed.",
+   "2026-10-14 EV gate set at +0.10R net per trade with CI above zero; frequency band 2 to 5 per week.",
+   "2026-10-14 H1 1H proxy retired (no effect on 451 sessions). H1 15m kept as the lead candidate, unproven on 157 sessions. Pending: multi-year intraday data purchase vs forward test.",
+   "2026-10-14 Break-even at a profit threshold rejected for NQ: it cost 13R to 26R on both setups in replay. Any stop move must be time or structure based and tested on a setup with edge.",
+   "2026-10-14 Research moved to the Windows PC. The H1 harness reproduces the Mac numbers exactly there.",
+   "2026-10-14 H2 (5-min ORB) retired on free data: negative on every pre-registered variant in selection. Reopen only with multi-year 5m bars.",
+   "2026-10-14 H3 parked: the overnight drift is real but small (+0.07R, 11 pts a night), the \"after a down day\" condition is wrong (up days did better), and a 17-hour hold is neither a day trade nor allowed by prop-firm rules.",
+   "2026-10-14 No data purchase (Nanon). Free data only. Yahoo daily bars are 23-hour Globex sessions, so the 26-year daily set serves features only; the 2-year 1H set is the main execution set.",
+   "2026-10-14 H13-filtered goes to a daily forward test with its spec frozen. Review at 30 trades, then 60. Not for live money. New gate for future candidates: the top 10 selection trades carry at most 60% of total R.",
+   "2026-10-14 Tradeify Select 50K: trade the account spec (conviction days, 0.375 ATR stop, half off at +1R). Gold is not tradable in this account.",
+   "2026-10-14 Fades are retired on NQ in RTH as a class (PDHL, gap fill, 1H mean reversion all failed). Tight breakouts are retired as a class (15m, 5m and 1H ORB all failed). What survives is early-session momentum held to the close.",
+   "2026-10-14 Sizing (Nanon, #20): $500 fixed-dollar risk per trade, 1 to 4 MNQ, which means 2 MNQ only on days where the stop is 125 points or less. Bootstrap 69% pass, 10% fail, median 68 sessions. Nothing in the plan changes before Track E has 30 trades.",
+   "2026-10-15 Verified on the Mac (#21): every harness from the Windows session re-run and reproduced; the Windows folder NQ-lab-2026-10-14 is the live kit from here on. One machine runs the daily forward log, not both.",
+   "2026-10-15 Batch 4 (#24): time-based break-even not adopted (+0.009R, under the +0.02R bar), the H13 stop stays; turn of the month retired as a tradable rule; FOMC pre-drift kept as research track G only (overnight hold, unusable under flat-by 16:45); the 14:00 exit is a pre-registered forward comparison recorded in parallel by the logger, adopted only if the forward gap is at least +0.02R at 60 trades. Tracks A to E unchanged.",
+   "2026-10-19 Pivot to stocks and ETFs (Nanon): SPY and QQQ, paper-traded on Alpaca; the Tradeify reset is off. The paper rule is Track A executed in QQQ (futures signal, QQQ market order at 10:00, stop 0.5 x QQQ daily ATR14, flat at 15:58, $500 risk in whole shares). Claude does not place orders on the account; the owner schedules the bot. The last-half-hour ETF momentum is retired; the overnight drift is a pre-registration candidate as an overlay.",
+   "2026-10-19 Mandate 2 (#33): paper book on Alpaca = sleeve A (H13 in QQQ, running) plus sleeve B (overnight QQQ + GLD, 40% of equity each, buy 15:59, sell 09:30:30, every session; skip-Friday logged in parallel). No crypto sleeve (no edge at 0.5% round trips; the 28-day BTC filter is a watched read). ETH and SPY: nothing. Costs corrected to today's cents as a fraction of today's price; the MDD drift gate will be rescaled (3x annual) in the next pre-registration, not retroactively."
+  ],
+  "log": [
+   {
+    "when": "2026-10-19 \u00b7 #33",
+    "text": "Five markets ranked. Overnight drift, net of today's costs: QQQ +5.0 bps a night (t 4.5 on 6,694 nights, Sharpe 0.88, holdout 1.23; the day session earns nothing; buy-and-hold Sharpe 0.48), GLD +3.7 (t 3.4, Sharpe 0.75), SPY +3.0 (t 4.1, Sharpe 0.71); the QQQ + GLD book Sharpe 1.07 across 21 years and 1.05 in the holdout. IBIT and ETHA overnight were strong in 2024 to 2025 and negative in the last 12 months: failed. Crypto weekly momentum in spot fails on fees (62 switches a year); the 28-day filter only matches buy-and-hold with a smaller drawdown. BTC's best hours (16:00 to 18:00 ET, +7.7 bps, t 3.7) are worth less than one Alpaca round trip. Verdict: H13 in QQQ is the only per-trade edge; the overnight premium is the robust carry; nothing in ETH, nothing extra in SPY. Decision: paper book = sleeve A plus the overnight QQQ + GLD sleeve; overnight bot and schedules written and dry-run."
+   },
+   {
+    "when": "2026-10-19 \u00b7 #32",
+    "text": "Where the return accrues. Two years of hourly bars: in every market we can trade on Alpaca the return comes while US cash equities are closed. QQQ overnight +4.4 bps a day against +1.7 intraday since 2004; GLD +4.4 against +0.2; gold futures +5.0 against -0.3; IBIT +18 against -6; BTC's strongest hours are 16:00 to 18:00 ET and 04:00 ET, US hours flat to negative. NQ's first-hour signal does not lead BTC (corr 0.05). Pre-registered: F1 overnight drift in the ETFs with a second gate set for daily-horizon rules, F3 crypto weekly momentum in spot, and three reads."
+   },
+   {
+    "when": "2026-10-19 \u00b7 #31",
+    "text": "Mandate 2. Trade live, no prop firms: BTC, ETH, gold, QQQ, SPY; find what has edge, compare, pick the best. Costs pinned first: Alpaca crypto spot 0.25% taker a side, long only (0.55% a round trip at the market), so intraday crypto on spot is ruled out before any test; ETFs at $0.02 a share. Data pulled for all five markets, two years hourly and full daily history. Hypotheses drawn from the literature on crypto momentum, crypto time-of-day, gold fixes and the equity overnight drift."
+   },
+   {
+    "when": "2026-10-19 \u00b7 #28",
+    "text": "ETF replication results. Building H13 from the ETFs themselves fails (+0.00R, PF 1.01): shift the window half an hour into the session and the signal is gone. The futures signal executed in QQQ carries over: selection N 212, +0.09R, PF 1.29, WF 3/3, one hundredth under the EV and PF gates; holdout N 56, +0.19R, PF 1.83; the 10:00 entry on 60 days of 15m bars reads +0.15R on 27. The last-half-hour momentum of Gao et al. is dead on QQQ and SPY 2023 to 2026 (-0.02R, PF 0.90, retired). The overnight drift is real (QQQ +5 bps a night since 1999, t 3.1; intraday -0.1 bps) but +0.06R a night, so an overlay question, not a standalone. Decisions: Track A in QQQ is the Alpaca paper rule; bot, read-only check and schedules written and dry-run; ETF costs $0.02 a share added to the protocol."
+   },
+   {
+    "when": "2026-10-19 \u00b7 #27",
+    "text": "Pivot pre-registered. Nanon moves from prop-firm futures to stocks and ETFs (SPY, QQQ) tested on Alpaca paper. Same underlyings, cheaper round trips, overnight holds allowed, Reg T leverage, PDT rule under $25k. QQQ and SPY data pulled (1H to 2023-11, daily to 1999 and 1993). Three families pre-registered with primaries: H13 on the ETFs and the futures signal executed in QQQ; the Gao et al. last-half-hour effect on the ETFs themselves; the overnight drift now that it can be held."
+   },
+   {
+    "when": "2026-10-19 \u00b7 #26",
+    "text": "Forward log through Monday. No H13 signal on 10-19 (rs -10 bps against a 21 bps median). Track C long stopped -1.01R; gold Asia short on the Sunday-night bar, time exit +1.26R. After three sessions: A/B one trade +1.89R; C three trades -0.71R; D three trades -0.75R; E +$637. Next session stop 191 pts, 1 MNQ (reference only while the accounts are closed). No research change."
+   },
+   {
+    "when": "2026-10-16 \u00b7 #25",
+    "text": "First forward sessions. 2026-10-15: no H13 signal (|rs| 11.7 bps under the 21.0 median); Track C short -0.09R; gold Asia short stopped -1.00R. 2026-10-16: H13 SHORT on a conviction day (rs -52 bps, median 20), entry 29,837, stop 241 pts, held to the close for +457 pts = +1.89R; the parallel 14:00 exit would have made +1.59R; Track E +319 pts after the half-off, +$637 at 1 MNQ; Track C short +0.39R; gold Asia stopped again -1.01R. Running: A/B one trade +1.89R, C two trades +0.29R, D two trades -2.01R. One trade is one trade; the review stays at 30. Next session stop 194 pts, 1 MNQ."
+   },
+   {
+    "when": "2026-10-15 \u00b7 #24",
+    "text": "Batch 4 and H21 results. Window map: only the 09:00 bar carries the relative-strength signal (V1 +0.121R, PF 1.42); pre-market, 08:00 and 10:00-only windows are flat or negative and the two-hour window dilutes it, so H13 is an opening-hour effect and nothing wider. Event map: every weekday positive; the edge sits in month-turn sessions (first 3 days N 34, +0.29R, PF 2.5; mid-month N 152, +0.07R, PF 1.2) and OPEX Fridays (10 of 10). Time map: exits at 14:00 give +0.15R with a third less drawdown versus +0.12R at 16:00 on the same 209 trades, the best of five looks, so it goes to a pre-registered forward comparison (the logger now records the 14:00 exit beside every Track A trade; decision at 60 trades). Break-even on a time threshold, the one primary: +0.009R, not adopted. FOMC drift: 20 meetings, +0.21R, PF 2.9, one stop, post-announcement control -0.21R; daily 2021 to 2026 +0.13R on 46 meetings against +0.03R on other days; research track G from the 2026-10-28 meeting, untradable under flat-by. Turn of the month: primary +0.005R, PF 1.01, retired; the raw drift (+21 pts over four sessions) does not survive a stop. H21 cross-check: the turn-minus-mid gap is positive in 3 of 3 blocks, on both sides, and under the two-hour window too, but its CI includes zero, so by the rule it is map noise; the 60-trade review recomputes it on forward trades. Tracks A to E unchanged."
+   },
+   {
+    "when": "2026-10-15 \u00b7 #23",
+    "text": "H21 pre-registered. Cross-check of the month-turn cell from the event map: turn versus mid-month EV with a bootstrap CI of the difference on the unfiltered set, on the two-hour and 10:00-only windows, by walk-forward block, and split by side. Decision rule written before the run: a structural read only if the difference clears zero, the gap is positive in every block and both longs and shorts win; otherwise map noise."
+   },
+   {
+    "when": "2026-10-15 \u00b7 #22",
+    "text": "Batch 4 pre-registered. Five reads on free data: the H13 signal-window map, an event and weekday map, a time map (exit hour and time-based break-even, one primary), the FOMC pre-announcement drift on 1H and daily data, and turn of the month on 26 years of daily bars (one primary, gates as written minus frequency). Nothing in the frozen tracks changes from a read."
+   },
+   {
+    "when": "2026-10-15 \u00b7 #21",
+    "text": "Verified on the Mac. The Windows folder was uploaded back and every harness re-run here with the bundled environment: batch 2, H13 diagnostics and overlays, batch 3, the account and sizing studies, the gold flat-by test, H2 and H3. Every selection-window number reproduces the log to the last digit (H13 filtered N=209, EV +0.121, CI [+0.01, +0.24], PF 1.42, WF 3/3; account spec N=165, EV +0.238, PF 1.83, MDD 890 pts; sizing P3 $500 at 69% / 10% / 68). Holdout tails moved by one session because the forward loggers re-pulled the 1H data on the same date and overwrote the dated snapshot, which also added the October 14 session; from October 15 the loggers write new dated files and the snapshots stay fixed. The three forward loggers run and correctly report no trades before 2026-10-15; the Track E sizing line prints (ATR 486, stop 182 pts, 1 MNQ). The H13 Pine script compiled with zero errors in TradingView on a fresh NQ1! 60-minute layout. Page brought up to entries #20 and #21."
+   },
+   {
+    "when": "2026-10-14 \u00b7 #20",
+    "text": "Sizing chosen: P3, $500 fixed-dollar risk. The forward logger now writes the contract count and dollar risk for every Track E trade (micros = floor(500 / (0.375 x ATR x $2)), 1 to 4) and prints the next session's sizing after each run. The Pine script shows the contract count in the trade label. Account spec plus sizing policy are the full plan for the Select 50K evaluation; nothing changes until Track E has 30 trades."
+   },
+   {
+    "when": "2026-10-14 \u00b7 #18-19",
+    "text": "Sizing optimization and tweak tests. Six sizing policies and three tweaks, pre-registered, in-sample. Signal strength does not grade outcomes (weak tercile +0.39R, mid +0.06R, strong +0.27R), so strength-based sizing is dropped. The half-off level stays at +1R. The stop curve is bumpy (0.25 / 0.30 / 0.375 / 0.5 ATR: +0.21 / +0.21 / +0.24 / +0.18R), so the 0.375 point is partly luck and the honest claim is that the whole 0.25 to 0.5 band is positive. Sizing: the evaluation is drawdown-bound, and every added micro buys speed with failure risk at about 2 to 3 points of fail per 10 sessions saved. Fixed 1 MNQ 60% pass / 4% fail / median 79 sessions; $500 constant-dollar risk (a second micro only when the stop is 125 points or less) 69% / 10% / 68; 25% of buffer 65% / 5% / 69; fixed 2 MNQ 75% / 23% / 39. Pre-registered pick: $500 constant-dollar risk. No strategy tweak adopted; further tuning on 165 trades would fit noise."
+   },
+   {
+    "when": "2026-10-14 \u00b7 #17",
+    "text": "Sized for Tradeify Select 50K. Rules as researched (verify on the dashboard): $3,000 target, $2,000 end-of-day trailing drawdown that locks at $50,100 once the peak reaches $52,100, no daily loss limit, 40% consistency, 3 minimum days, 40 micros max, flat by 4:45 PM ET. The research spec's 0.5 ATR stop is $390 per MNQ and its historical drawdown $4,236 per micro: a poor fit (2 MNQ: 50% pass, 50% fail). Nine pre-registered variants, all in-sample: conviction days only with a 0.375 ATR stop and half off at +1R keeps EV at +0.24R, drops the historical drawdown to $1,780 per micro and the best day to $634, and bootstraps to 60% pass / 4% fail at 1 MNQ (median 79 sessions), 70% / 9% staged to 2 MNQ at $51k, 75% / 24% at 2 MNQ flat. The selection rule picks 1 MNQ. Gold forced flat at 16:00 loses its edge (PF 1.05) and is out for this account. Account spec added as Track E on the forward log; the evaluation itself is the forward test."
+   },
+   {
+    "when": "2026-10-14 \u00b7 #14-16",
+    "text": "Track D gold on the forward log; H13 Pine script (pine/cues_h13_nq.pine) drawing entry, red stop box and green exit box per trade with width equal to duration; Tradeify rules researched and account variants pre-registered."
+   },
+   {
+    "when": "2026-10-14 \u00b7 #13",
+    "text": "Batch 3: H13 as a driving factor. Can H13 days be entered better? No. A pullback entry with a structure stop lost -0.25R with 79% stopped; the 0.5 ATR stop at 10:00 is the mechanism, since NQ's hourly noise exceeds any pullback bar. Do the days H13 skips have an edge? No: fading the first hour +0.02R, following it +0.04R, both noise. Does a European-open window stack? No: 217 trades, EV -0.01R, and uncorrelated with H13 (-0.03). Management: taking half off at +1R keeps EV at +0.12R while cutting the top-10 share from 84% to 62% and drawdown from 9.7R to 8.8R; no EV lift, so no new track, but the forward log now records each trade's best and worst excursion so this can be read off the forward data later. Conclusion: H13 is one-dimensional and already used as well as this data allows. What adds on is a different instrument."
+   },
+   {
+    "when": "2026-10-14 \u00b7 #12",
+    "text": "Batch 3 pre-registered. Nanon asked to use H13 as a driving factor and look for add-ons. Three questions, one family each: H14 better entries on H13 days, H16 the quiet days H13 skips, H15 European-open momentum as a second window; plus H17, three management rules on the H13 base, judged in-sample only."
+   },
+   {
+    "when": "2026-10-14 \u00b7 #11",
+    "text": "Overlay study, second track earned. On the 209 H13 base trades (selection only, the holdout is spent): daily-trend agreement hurts (EV +0.07R) and its counter-trend control helps (+0.17R), which reads as noise; volume participation hurts (+0.08R); first-hour conviction (the 09:00 bar closes in the outer third of its range in the signal direction) lifts EV to +0.18R, PF 1.73, WF 3/3 and cuts the top-10 share from 84% to 64% on N=165; the higher-volatility half carries the edge (+0.18R above the ATR median, -0.04R below), in line with the paper. Conviction meets the pre-registered rule and becomes Track B. Both overlays run at 1.7 to 1.8 trades a week on selection, under the 2 a week floor. Nothing is combined. These are in-sample numbers and the least trustworthy in this log; only the forward tracks can confirm them."
+   },
+   {
+    "when": "2026-10-14 \u00b7 #10",
+    "text": "H7 parked, H1 added to the forward log. Free 5m bars cover 118 sessions in two windows, about 22 of them inside the H13 selection window; a lower-timeframe delta filter cannot be validated on that. The H1 15m rule, frozen since entry #2, joins the daily forward log as Track C. Overlay study pre-registered with a hard rule for earning a second H13 track: EV lift of at least +0.03R, N at least 100, top-10 share under 70%, walk-forward 3 of 3."
+   },
+   {
+    "when": "2026-10-14 \u00b7 #9",
+    "text": "H13 diagnostics, forward test started. Neighbors: every one keeps a positive EV (stop 0.375 to 0.625 ATR, window 45 to 75, filter 1.25x). Controls: NQ's own first-hour return with the same filter gets EV +0.09R and PF 1.31 against +0.12R and 1.42 with ES, and the 15 pure relative-strength days lose. So it is first-hour momentum held to the close, sharpened a little by ES. Cuts: shorts +0.16R, longs +0.08R; 2025H2 was negative; the top 10 of 209 trades carry 84% of the profit, without them EV is +0.02R. Verdict: passes the gates, fragile. Spec frozen and logged daily from 2026-10-15 by research/h13_forward.py. Review at 30 trades. Not live."
+   },
+   {
+    "when": "2026-10-14 \u00b7 #8",
+    "text": "Batch 2 results. 22 variants across five families on 451 selection sessions of 1H bars, 135 holdout. H4 gap fade: primary EV -0.03R, holdout -0.29R; retired. H8 first-hour breakout: flat on selection (EV +0.03R, PF 1.12), negative on holdout; the third ORB-type failure; retired. H9 midday continuation: EV +0.10R and PF 1.52 on selection with 1.3 a week, then -0.05R on holdout; retired. H10 1H mean reversion: EV -0.35R, 78% stopped, the worst rule in the project; retired. H13 ES relative strength: unfiltered +0.09R on selection, -0.02R on holdout; the magnitude-filtered variant N=209, EV +0.12R, CI above zero, PF 1.42, WF 3/3, 2.3 a week, then holdout N=47, EV +0.08R, PF 1.30. First formal pass. Flagged before diagnostics: one pass in 22 is what chance predicts, and the holdout CI spans zero."
+   },
+   {
+    "when": "2026-10-14 \u00b7 #7",
+    "text": "Free data only. Nanon declined the data purchase. Checked what Yahoo's daily bars are: the open is the 18:00 ET Globex open and the close is the 17:00 settlement, so they cannot carry regular-hours day-trade rules. Sample size on free data has to come from the 2-year 1H bars (586 sessions) or multi-trade rules on 15m. Pre-registered five families on 1H: H4 gap fade, H8 first-hour breakout, H9 midday continuation, H10 1H mean reversion, H13 ES relative strength."
+   },
+   {
+    "when": "2026-10-14 \u00b7 #6",
+    "text": "H3 overnight hold tested. 477 selection sessions on 2y of 1H bars, 134 holdout. The pre-registered primary (long after a down day, stop 0.5 daily ATR, exit at 09:00): EV +0.045R, CI [-0.06, +0.16], PF 1.15, WF 2/3. Fails. The control (after an up day) did better: EV +0.09R, PF 1.42. The conditioning idea is wrong. Long every night: N=477, EV +0.072R, CI [+0.005, +0.137], PF 1.28, WF 3/3, 5 a week, +11 pts a night, holdout EV +0.09R and PF 1.31. The CI clears zero on both windows, but it misses the +0.10R and PF 1.30 gates, the sample is a two-year bull run, and the hold runs 17 hours, which prop-firm rules do not allow. Parked as a measured fact. Standing: 0 of 3 candidates pass. H4 next."
+   },
+   {
+    "when": "2026-10-14 \u00b7 #5",
+    "text": "H2 5-min ORB tested. Pre-registered the paper's rule (first 5-min candle sets direction, enter 09:35, stop at the other side of the candle floored at 0.10 daily ATR, target 10R or 15:55 close, 0.70 pt costs). Selection: 48 sessions Mar 2 to May 7. Primary: WR 21%, EV -0.34R, PF 0.58, -16.2R, WF 1/3, 38 of 48 stopped, the 10R target never hit. Every secondary negative too: 2R, 3R, EOD exit, stop 0.75x and 1.25x, gap-agreement filter, 1 pt slippage stress. Holdout (48 sessions Aug 6 to Oct 13, one look): primary EV +0.08R, PF 1.12. A rule that fails selection is not rescued by its holdout. Pooled 96 sessions: EV -0.13R, PF 0.82, 1 target hit. H2 retired on free data."
+   },
+   {
+    "when": "2026-10-14 \u00b7 #4",
+    "text": "Paused on the Mac, moved to the Windows PC. The Mac session handed off via the firm/windows bundle (research kit, data, docs). On Windows: Python 3.13 environment built (the 3.15 numpy DLLs were blocked by Smart App Control until Nanon turned it off). The H1 harness rerun on Windows reproduces entry #2 to the third decimal. H2 pre-registered in the log before its harness was written."
+   },
+   {
+    "when": "2026-10-14 \u00b7 #3",
+    "text": "H6 break-even study. PDHL fade (N=222) and ORB (N=186) replayed under ten stop rules on the selection window. PDHL: 49% of trades reach +1R, then 44% go to target and 49% come back to the stop; 36% of eventual winners touch entry again after +1R. Every profit-threshold break-even rule loses versus no rule (BE at +1R: -25R; BE at +0.5R: -26R; stop-to-level: -13R to -20R). Only a time-based cut (BE after 8 bars if positive) helped, +8R, and the setup is still negative. ORB: stopped trades almost never saw +1R first (4%), 63% are time exits, every BE rule hurts. Rule going forward: a stop moves on time or structure, never on profit, and only on a setup with edge. Windows bundle built."
+   },
+   {
+    "when": "2026-10-14 \u00b7 #2",
+    "text": "H3 measured, H1 tested. Drift on 2y of 1H bars accrues outside RTH: Asia +3.6 bps/day (t 1.7), Europe +2.6 (t 1.2), RTH +1.2 (t 0.3); the 03:00 ET hour (European open) is the strongest single hour. H1 at the 1-hour proxy shows nothing (t -1.2 on 451 sessions, every variant negative); retired. H1 at the paper's 30-minute granularity shows the effect: t 1.9, sign agreement 55%, primary rule EV +0.12R, PF 1.39, 3 of 3 walk-forward blocks, 5 trades a week, 22% stopped, +9.4 pts a trade after costs. N=157 and the CI spans zero, so no gate pass. The agreement filter gives 2.6 trades a week at EV +0.09R on N=80. To settle H1 we need 2 to 3 years of 15m bars: buy from Databento or forward-test for about five months. Decision is Nanon's. Next: H2 5-min ORB, H3 overnight-hold rule."
+   },
+   {
+    "when": "2026-10-14 \u00b7 #1",
+    "text": "Mandate received. Gates and protocol written. Four literature searches run: intraday momentum, 5-min ORB, overnight drift, cost-aware intraday evidence. Daily NQ and ES history pulled to deepen the sample for daily-horizon tests. This page created. Next: H1 harness on 1H (2y) and 15m (7.5 months) with costs, then H3 drift measurement."
+   }
+  ],
+  "retired": [
+   {
+    "id": "H2",
+    "name": "The 5-minute ORB survives NQ costs",
+    "rule": "First 5-min candle sets direction, enter 09:35, stop at the other side of the candle, target 10R or 16:00.",
+    "freq": "up to 1/day, filters reduce it",
+    "status": "fail, retired on free data",
+    "level": "bad"
+   },
+   {
+    "id": "H4",
+    "name": "Open-gap mean reversion",
+    "rule": "Open beyond the prior-day range by more than x ATR: fade toward the range edge, stop beyond the gap extreme.",
+    "freq": "1 to 3/wk",
+    "status": "fail, retired",
+    "level": "bad"
+   },
+   {
+    "id": "H8",
+    "name": "First-hour range breakout holds to the close",
+    "rule": "09:00 bar range; first 1H close beyond it (10:00 to 12:00) sets direction; stop other side; exit 16:00.",
+    "freq": "3 to 4/wk",
+    "status": "fail, retired (third ORB failure)",
+    "level": "bad"
+   },
+   {
+    "id": "H9",
+    "name": "A big morning move continues into the afternoon",
+    "rule": "At 13:00, if the 09:00-to-12:00 move is at least 0.5 daily ATR, continue; stop 0.5 ATR; exit 16:00.",
+    "freq": "1 to 2/wk",
+    "status": "fail, retired",
+    "level": "bad"
+   },
+   {
+    "id": "H10",
+    "name": "A big 1H bar mean-reverts",
+    "rule": "Fade any 10:00 to 14:00 bar with a body of at least 1.0 ATR; stop at its extreme; target its midpoint.",
+    "freq": "2 to 4/wk",
+    "status": "fail hard, retired",
+    "level": "bad"
+   },
+   {
+    "id": "H14",
+    "name": "H13 days can be entered better than at 10:00 with a wide stop",
+    "rule": "Wait for a pullback bar, stop at its extreme; or enter on continuation beyond the first-hour range.",
+    "freq": "1.4 to 2.3/wk",
+    "status": "fail: the wide stop is the mechanism",
+    "level": "bad"
+   },
+   {
+    "id": "H16",
+    "name": "The days H13 skips (quiet first hour) have an edge of their own",
+    "rule": "Fade or follow the first hour at 10:00; or fade a range-edge reclaim.",
+    "freq": "2.4/wk",
+    "status": "fail: nothing either way",
+    "level": "bad"
+   },
+   {
+    "id": "H15",
+    "name": "European-open momentum stacks with H13 in a different window",
+    "rule": "Sign of the 03:00 ET bar, filtered, stop 0.5 ATR, exit at the 09:00 open.",
+    "freq": "2.4/wk",
+    "status": "fail: EV zero, uncorrelated",
+    "level": "bad"
+   },
+   {
+    "id": "H20",
+    "name": "Turn of the month is capturable on NQ",
+    "rule": "Long at the close of the second-to-last session of the month, exit at the close of the third session of the next; stop 1.0 ATR.",
+    "freq": "12/yr",
+    "status": "fail, retired (stop removes the drift)",
+    "level": "bad"
+   },
+   {
+    "id": "E1",
+    "name": "H13 built from the ETFs themselves (QQQ versus SPY over the 09:30 bar)",
+    "rule": "Enter QQQ at 10:30 in the direction of the first-hour relative strength, stop 0.5 x daily ATR, exit 16:00.",
+    "freq": "2.4/wk",
+    "status": "fail: the window moves into the session and the signal is gone",
+    "level": "bad"
+   },
+   {
+    "id": "E2",
+    "name": "Last-half-hour momentum on the ETFs (Gao, Han, Li, Zhou)",
+    "rule": "First-hour sign, trade 15:30 to 16:00, stop 1.0 x ATR14 (1H).",
+    "freq": "5/wk",
+    "status": "fail on QQQ and SPY 2023 to 2026, retired",
+    "level": "bad"
+   },
+   {
+    "id": "F3",
+    "name": "Crypto time-series momentum in spot (Liu and Tsyvinski)",
+    "rule": "Long BTC/ETH when the past 7-day return is positive, flat otherwise; 0.45% a switch; 28-day secondary.",
+    "freq": "weekly",
+    "status": "7-day fails (fees); 28-day only matches buy-and-hold with less drawdown; not adopted",
+    "level": "bad"
+   }
+  ],
+  "h13": {
+   "selection": {
+    "PRIMARY: sign(rs) at 10:00, stop 0.5 ATR, exit 16:00": {
+     "n": 451,
+     "wr": 0.514,
+     "ev": 0.091,
+     "ci": [
+      0.013,
+      0.169
+     ],
+     "pf": 1.32,
+     "total_r": 41.05,
+     "sharpe": 1.68,
+     "mdd": 15.75,
+     "per_week": 5.0,
+     "stopped": 0.19,
+     "mean_pts": 20.88,
+     "wf": "3/3"
+    },
+    "|rs| above rolling 60-session median": {
+     "n": 209,
+     "wr": 0.531,
+     "ev": 0.121,
+     "ci": [
+      0.01,
+      0.241
+     ],
+     "pf": 1.42,
+     "total_r": 25.38,
+     "sharpe": 1.55,
+     "mdd": 9.72,
+     "per_week": 2.32,
+     "stopped": 0.19,
+     "mean_pts": 22.55,
+     "wf": "3/3"
+    },
+    "control: reverse direction": {
+     "n": 451,
+     "wr": 0.443,
+     "ev": -0.081,
+     "ci": [
+      -0.157,
+      0.002
+     ],
+     "pf": 0.78,
+     "total_r": -36.43,
+     "sharpe": -1.46,
+     "mdd": 40.85,
+     "per_week": 5.0,
+     "stopped": 0.26,
+     "mean_pts": -17.7,
+     "wf": "0/3"
+    }
+   },
+   "holdout": {
+    "PRIMARY: sign(rs) at 10:00, stop 0.5 ATR, exit 16:00": {
+     "n": 113,
+     "wr": 0.469,
+     "ev": -0.019,
+     "ci": [
+      -0.159,
+      0.124
+     ],
+     "pf": 0.94,
+     "total_r": -2.14,
+     "sharpe": -0.39,
+     "mdd": 10.68,
+     "per_week": 5.0,
+     "stopped": 0.19,
+     "mean_pts": 0.04
+    },
+    "|rs| above rolling 60-session median": {
+     "n": 47,
+     "wr": 0.532,
+     "ev": 0.075,
+     "ci": [
+      -0.146,
+      0.314
+     ],
+     "pf": 1.3,
+     "total_r": 3.51,
+     "sharpe": 0.94,
+     "mdd": 3.03,
+     "per_week": 2.08,
+     "stopped": 0.15,
+     "mean_pts": 23.74
+    },
+    "control: reverse direction": {
+     "n": 113,
+     "wr": 0.513,
+     "ev": -0.013,
+     "ci": [
+      -0.135,
+      0.114
+     ],
+     "pf": 0.95,
+     "total_r": -1.47,
+     "sharpe": -0.3,
+     "mdd": 9.72,
+     "per_week": 5.0,
+     "stopped": 0.19,
+     "mean_pts": -9.4
+    }
+   }
+  },
+  "overlays": {
+   "base H13 filtered": {
+    "n": 209,
+    "wr": 0.531,
+    "ev": 0.121,
+    "ci": [
+     0.008,
+     0.236
+    ],
+    "pf": 1.42,
+    "total_r": 25.38,
+    "sharpe": 1.55,
+    "mdd": 9.72,
+    "per_week": 2.32,
+    "stopped": 0.19,
+    "mean_pts": 22.55,
+    "wf": "3/3",
+    "top10_share": 0.84,
+    "second_track": false
+   },
+   "O1 trend20 agrees": {
+    "n": 101,
+    "wr": 0.525,
+    "ev": 0.074,
+    "ci": [
+     -0.075,
+     0.232
+    ],
+    "pf": 1.26,
+    "total_r": 7.46,
+    "sharpe": 0.72,
+    "mdd": 7.27,
+    "per_week": 1.12,
+    "stopped": 0.22,
+    "mean_pts": 14.27,
+    "wf": "2/3",
+    "top10_share": 1.96,
+    "second_track": false
+   },
+   "O5 control: counter-trend": {
+    "n": 108,
+    "wr": 0.537,
+    "ev": 0.166,
+    "ci": [
+     -0.0,
+     0.345
+    ],
+    "pf": 1.57,
+    "total_r": 17.92,
+    "sharpe": 1.41,
+    "mdd": 4.17,
+    "per_week": 1.2,
+    "stopped": 0.17,
+    "mean_pts": 30.29,
+    "wf": "3/3",
+    "top10_share": 1.1,
+    "second_track": false
+   },
+   "O2 09:00 volume > 20-session median": {
+    "n": 122,
+    "wr": 0.467,
+    "ev": 0.08,
+    "ci": [
+     -0.088,
+     0.246
+    ],
+    "pf": 1.22,
+    "total_r": 9.73,
+    "sharpe": 0.68,
+    "mdd": 11.49,
+    "per_week": 1.35,
+    "stopped": 0.25,
+    "mean_pts": 9.6,
+    "wf": "2/3",
+    "top10_share": 2.15,
+    "second_track": false
+   },
+   "O3 09:00 close in outer third (conviction)": {
+    "n": 165,
+    "wr": 0.582,
+    "ev": 0.183,
+    "ci": [
+     0.064,
+     0.307
+    ],
+    "pf": 1.73,
+    "total_r": 30.16,
+    "sharpe": 2.16,
+    "mdd": 5.67,
+    "per_week": 1.83,
+    "stopped": 0.16,
+    "mean_pts": 37.3,
+    "wf": "3/3",
+    "top10_share": 0.64,
+    "second_track": true
+   },
+   "O4 ATR pct 20-80": {
+    "n": 89,
+    "wr": 0.618,
+    "ev": 0.198,
+    "ci": [
+     0.023,
+     0.377
+    ],
+    "pf": 1.77,
+    "total_r": 17.6,
+    "sharpe": 1.63,
+    "mdd": 7.55,
+    "per_week": 0.99,
+    "stopped": 0.17,
+    "mean_pts": 37.27,
+    "wf": "3/3",
+    "top10_share": 0.94,
+    "second_track": false
+   },
+   "O4 ATR pct > 50": {
+    "n": 153,
+    "wr": 0.582,
+    "ev": 0.179,
+    "ci": [
+     0.049,
+     0.307
+    ],
+    "pf": 1.69,
+    "total_r": 27.43,
+    "sharpe": 2.03,
+    "mdd": 6.9,
+    "per_week": 1.7,
+    "stopped": 0.18,
+    "mean_pts": 34.87,
+    "wf": "3/3",
+    "top10_share": 0.66,
+    "second_track": true
+   },
+   "O4 ATR pct <= 50": {
+    "n": 56,
+    "wr": 0.393,
+    "ev": -0.037,
+    "ci": [
+     -0.254,
+     0.205
+    ],
+    "pf": 0.9,
+    "total_r": -2.05,
+    "sharpe": -0.23,
+    "mdd": 7.16,
+    "per_week": 0.62,
+    "stopped": 0.21,
+    "mean_pts": -11.13,
+    "wf": "1/3",
+    "top10_share": null,
+    "second_track": false
+   }
+  },
+  "account_study": {
+   "base: 0.5 ATR, all signal days": {
+    "summary": {
+     "n": 209,
+     "ev_r": 0.121,
+     "pf": 1.42,
+     "mean_pts": 22.5,
+     "stop_med": 195,
+     "mdd_r": 9.7,
+     "mdd_pts": 2118,
+     "best_pts": 445,
+     "per_week": 2.32,
+     "stopped": 0.19
+    },
+    "sims": [
+     {
+      "micros": 1,
+      "pass_rate": 0.498,
+      "fail_rate": 0.277,
+      "timeout": 0.224,
+      "median_days_to_pass": 68
+     },
+     {
+      "micros": 2,
+      "pass_rate": 0.495,
+      "fail_rate": 0.499,
+      "timeout": 0.006,
+      "median_days_to_pass": 32
+     },
+     {
+      "micros": 3,
+      "pass_rate": 0.408,
+      "fail_rate": 0.59,
+      "timeout": 0.002,
+      "median_days_to_pass": 24
+     },
+     {
+      "micros": "1->2@51000",
+      "pass_rate": 0.514,
+      "fail_rate": 0.37,
+      "timeout": 0.116,
+      "median_days_to_pass": 52
+     },
+     {
+      "micros": "2->3@51000",
+      "pass_rate": 0.426,
+      "fail_rate": 0.57,
+      "timeout": 0.003,
+      "median_days_to_pass": 28
+     }
+    ]
+   },
+   "base + half off at +1R": {
+    "summary": {
+     "n": 209,
+     "ev_r": 0.121,
+     "pf": 1.43,
+     "mean_pts": 23.3,
+     "stop_med": 195,
+     "mdd_r": 8.8,
+     "mdd_pts": 1928,
+     "best_pts": 348,
+     "per_week": 2.32,
+     "stopped": 0.19
+    },
+    "sims": [
+     {
+      "micros": 1,
+      "pass_rate": 0.5,
+      "fail_rate": 0.249,
+      "timeout": 0.25,
+      "median_days_to_pass": 69
+     },
+     {
+      "micros": 2,
+      "pass_rate": 0.549,
+      "fail_rate": 0.45,
+      "timeout": 0.001,
+      "median_days_to_pass": 29
+     },
+     {
+      "micros": 3,
+      "pass_rate": 0.454,
+      "fail_rate": 0.546,
+      "timeout": 0.0,
+      "median_days_to_pass": 20
+     },
+     {
+      "micros": "1->2@51000",
+      "pass_rate": 0.557,
+      "fail_rate": 0.336,
+      "timeout": 0.108,
+      "median_days_to_pass": 51
+     },
+     {
+      "micros": "2->3@51000",
+      "pass_rate": 0.48,
+      "fail_rate": 0.519,
+      "timeout": 0.0,
+      "median_days_to_pass": 24
+     }
+    ]
+   },
+   "conviction, 0.375 ATR": {
+    "summary": {
+     "n": 165,
+     "ev_r": 0.228,
+     "pf": 1.7,
+     "mean_pts": 34.7,
+     "stop_med": 146,
+     "mdd_r": 6.4,
+     "mdd_pts": 1035,
+     "best_pts": 445,
+     "per_week": 1.83,
+     "stopped": 0.27
+    },
+    "sims": [
+     {
+      "micros": 1,
+      "pass_rate": 0.581,
+      "fail_rate": 0.073,
+      "timeout": 0.346,
+      "median_days_to_pass": 75
+     },
+     {
+      "micros": 2,
+      "pass_rate": 0.673,
+      "fail_rate": 0.305,
+      "timeout": 0.022,
+      "median_days_to_pass": 41
+     },
+     {
+      "micros": 3,
+      "pass_rate": 0.562,
+      "fail_rate": 0.427,
+      "timeout": 0.011,
+      "median_days_to_pass": 32
+     },
+     {
+      "micros": "1->2@51000",
+      "pass_rate": 0.647,
+      "fail_rate": 0.137,
+      "timeout": 0.216,
+      "median_days_to_pass": 60
+     },
+     {
+      "micros": "2->3@51000",
+      "pass_rate": 0.596,
+      "fail_rate": 0.389,
+      "timeout": 0.015,
+      "median_days_to_pass": 36
+     }
+    ]
+   },
+   "ACCOUNT SPEC: conviction, 0.375 ATR, half off at +1R": {
+    "summary": {
+     "n": 165,
+     "ev_r": 0.238,
+     "pf": 1.83,
+     "mean_pts": 35.7,
+     "stop_med": 146,
+     "mdd_r": 5.1,
+     "mdd_pts": 890,
+     "best_pts": 317,
+     "per_week": 1.83,
+     "stopped": 0.27
+    },
+    "sims": [
+     {
+      "micros": 1,
+      "pass_rate": 0.603,
+      "fail_rate": 0.044,
+      "timeout": 0.353,
+      "median_days_to_pass": 79
+     },
+     {
+      "micros": 2,
+      "pass_rate": 0.748,
+      "fail_rate": 0.239,
+      "timeout": 0.013,
+      "median_days_to_pass": 40
+     },
+     {
+      "micros": 3,
+      "pass_rate": 0.661,
+      "fail_rate": 0.338,
+      "timeout": 0.001,
+      "median_days_to_pass": 26
+     },
+     {
+      "micros": "1->2@51000",
+      "pass_rate": 0.698,
+      "fail_rate": 0.089,
+      "timeout": 0.212,
+      "median_days_to_pass": 61
+     },
+     {
+      "micros": "2->3@51000",
+      "pass_rate": 0.705,
+      "fail_rate": 0.288,
+      "timeout": 0.006,
+      "median_days_to_pass": 33
+     }
+    ]
+   }
+  },
+  "sizing": {
+   "records": {
+    "n": 165,
+    "ev_r": 0.238,
+    "mean_pts": 35.7,
+    "mdd_pts": 890,
+    "best_pts": 317,
+    "worst_pts": -266
+   },
+   "tweaks": {
+    "half +0.75R": {
+     "n": 165,
+     "ev_r": 0.205,
+     "mean_pts": 31.5,
+     "mdd_pts": 779,
+     "best_pts": 293,
+     "worst_pts": -266
+    },
+    "half +1.0R (spec)": {
+     "n": 165,
+     "ev_r": 0.238,
+     "mean_pts": 35.7,
+     "mdd_pts": 890,
+     "best_pts": 317,
+     "worst_pts": -266
+    },
+    "half +1.5R": {
+     "n": 165,
+     "ev_r": 0.236,
+     "mean_pts": 36.2,
+     "mdd_pts": 909,
+     "best_pts": 364,
+     "worst_pts": -266
+    },
+    "no half-off": {
+     "n": 165,
+     "ev_r": 0.228,
+     "mean_pts": 34.7,
+     "mdd_pts": 1035,
+     "best_pts": 445,
+     "worst_pts": -266
+    },
+    "stop 0.25 + half 1R": {
+     "n": 165,
+     "ev_r": 0.211,
+     "mean_pts": 19.4,
+     "mdd_pts": 912,
+     "best_pts": 285,
+     "worst_pts": -233
+    },
+    "stop 0.30 + half 1R": {
+     "n": 165,
+     "ev_r": 0.207,
+     "mean_pts": 22.4,
+     "mdd_pts": 1148,
+     "best_pts": 298,
+     "worst_pts": -280
+    },
+    "stop 0.375 + half 1R (spec)": {
+     "n": 165,
+     "ev_r": 0.238,
+     "mean_pts": 35.7,
+     "mdd_pts": 890,
+     "best_pts": 317,
+     "worst_pts": -266
+    },
+    "stop 0.5 + half 1R": {
+     "n": 165,
+     "ev_r": 0.182,
+     "mean_pts": 37.7,
+     "mdd_pts": 1149,
+     "best_pts": 348,
+     "worst_pts": -354
+    }
+   },
+   "strength_monotone": false,
+   "sizing": {
+    "P1 fixed 1": {
+     "pass_rate": 0.603,
+     "fail_rate": 0.043,
+     "timeout": 0.355,
+     "median_days": 79,
+     "mean_size": 1.0
+    },
+    "P2 fixed 2": {
+     "pass_rate": 0.753,
+     "fail_rate": 0.231,
+     "timeout": 0.016,
+     "median_days": 39,
+     "mean_size": 2.0
+    },
+    "P3 $300 risk": {
+     "pass_rate": 0.588,
+     "fail_rate": 0.044,
+     "timeout": 0.368,
+     "median_days": 78,
+     "mean_size": 1.0
+    },
+    "P3 $400 risk": {
+     "pass_rate": 0.607,
+     "fail_rate": 0.045,
+     "timeout": 0.348,
+     "median_days": 78,
+     "mean_size": 1.01
+    },
+    "P3 $500 risk": {
+     "pass_rate": 0.691,
+     "fail_rate": 0.099,
+     "timeout": 0.21,
+     "median_days": 68,
+     "mean_size": 1.33
+    },
+    "P4 15% of buffer": {
+     "pass_rate": 0.595,
+     "fail_rate": 0.043,
+     "timeout": 0.363,
+     "median_days": 78,
+     "mean_size": 1.0
+    },
+    "P4 20% of buffer": {
+     "pass_rate": 0.595,
+     "fail_rate": 0.041,
+     "timeout": 0.364,
+     "median_days": 76,
+     "mean_size": 1.03
+    },
+    "P4 25% of buffer": {
+     "pass_rate": 0.647,
+     "fail_rate": 0.053,
+     "timeout": 0.3,
+     "median_days": 69,
+     "mean_size": 1.2
+    },
+    "P5 strength >=1.5 -> 2": {
+     "pass_rate": 0.71,
+     "fail_rate": 0.247,
+     "timeout": 0.043,
+     "median_days": 49,
+     "mean_size": 1.7
+    },
+    "P6 P4 20% + strength bump": {
+     "pass_rate": 0.7,
+     "fail_rate": 0.251,
+     "timeout": 0.049,
+     "median_days": 47,
+     "mean_size": 1.74
+    }
+   }
+  }
+ },
+ "trading": {
+  "tracks": [
+   {
+    "id": "A",
+    "name": "H13 filtered",
+    "instrument": "NQ 1H",
+    "spec": "rs = NQ minus ES return over the 09:00 bar; trade sign(rs) at 10:00 when |rs| is above its 60-session median; stop 0.5 x daily ATR14; exit at the 16:00 close.",
+    "start": "2026-10-15",
+    "review_at": 30,
+    "backtest": {
+     "n": 209,
+     "ev": 0.121,
+     "pf": 1.42,
+     "wf": "3/3",
+     "per_week": 2.3,
+     "holdout": "N=47, EV +0.08, PF 1.30"
+    },
+    "forward": {
+     "n": 1,
+     "ev": 1.894,
+     "wr": 1.0,
+     "pf": 99.0,
+     "total_r": 1.89
+    },
+    "rows": [
+     {
+      "date": "2026-10-15",
+      "signal": "none",
+      "rs": -11.74,
+      "median": 20.95,
+      "conv": null,
+      "entry": null,
+      "stop_dist": null,
+      "exit_kind": null,
+      "pnl_pts": null,
+      "r": null,
+      "mfe_r": null,
+      "mae_r": null,
+      "exit14_kind": null,
+      "pnl14_pts": null,
+      "r14": null,
+      "acct_pts": null,
+      "micros": null,
+      "acct_usd": null
+     },
+     {
+      "date": "2026-10-16",
+      "signal": "SHORT",
+      "rs": -52.21,
+      "median": 19.75,
+      "conv": true,
+      "entry": 29837.0,
+      "stop_dist": 241.36,
+      "exit_kind": "EOD",
+      "pnl_pts": 457.05,
+      "r": 1.894,
+      "mfe_r": 2.35,
+      "mae_r": 0.46,
+      "exit14_kind": "EOD",
+      "pnl14_pts": 384.05,
+      "r14": 1.591,
+      "acct_pts": 318.93,
+      "micros": 1.0,
+      "acct_usd": 636.82
+     },
+     {
+      "date": "2026-10-19",
+      "signal": "none",
+      "rs": -9.63,
+      "median": 20.95,
+      "conv": null,
+      "entry": null,
+      "stop_dist": null,
+      "exit_kind": null,
+      "pnl_pts": null,
+      "r": null,
+      "mfe_r": null,
+      "mae_r": null,
+      "exit14_kind": null,
+      "pnl14_pts": null,
+      "r14": null,
+      "acct_pts": null,
+      "micros": null,
+      "acct_usd": null
+     }
+    ]
+   },
+   {
+    "id": "B",
+    "name": "H13 + conviction",
+    "instrument": "NQ 1H",
+    "spec": "Track A plus: the 09:00 bar closes in the outer third of its range in the signal direction.",
+    "start": "2026-10-15",
+    "review_at": 30,
+    "backtest": {
+     "n": 165,
+     "ev": 0.183,
+     "pf": 1.73,
+     "wf": "3/3",
+     "per_week": 1.8,
+     "holdout": "in-sample only"
+    },
+    "forward": {
+     "n": 1,
+     "ev": 1.894,
+     "wr": 1.0,
+     "pf": 99.0,
+     "total_r": 1.89
+    },
+    "rows": [
+     {
+      "date": "2026-10-16",
+      "signal": "SHORT",
+      "rs": -52.21,
+      "median": 19.75,
+      "conv": true,
+      "entry": 29837.0,
+      "stop_dist": 241.36,
+      "exit_kind": "EOD",
+      "pnl_pts": 457.05,
+      "r": 1.894,
+      "mfe_r": 2.35,
+      "mae_r": 0.46,
+      "exit14_kind": "EOD",
+      "pnl14_pts": 384.05,
+      "r14": 1.591,
+      "acct_pts": 318.93,
+      "micros": 1.0,
+      "acct_usd": 636.82
+     }
+    ]
+   },
+   {
+    "id": "C",
+    "name": "H1 intraday momentum",
+    "instrument": "NQ 15m",
+    "spec": "Direction = sign of the 09:30 to 10:00 return from the prior close; entry at the 15:30 open; stop 1.0 x ATR14(15m); exit at the 16:00 close.",
+    "start": "2026-10-15",
+    "review_at": 30,
+    "backtest": {
+     "n": 157,
+     "ev": 0.12,
+     "pf": 1.39,
+     "wf": "3/3",
+     "per_week": 5.0,
+     "holdout": "CI includes 0"
+    },
+    "forward": {
+     "n": 3,
+     "ev": -0.238,
+     "wr": 0.333,
+     "pf": 0.35,
+     "total_r": -0.71
+    },
+    "rows": [
+     {
+      "date": "2026-10-15",
+      "signal": "SHORT",
+      "r_first_bps": -165.23,
+      "entry": 30134.75,
+      "stop_dist": 72.41,
+      "exit_kind": "EOD",
+      "pnl_pts": -6.7,
+      "r": -0.093
+     },
+     {
+      "date": "2026-10-16",
+      "signal": "SHORT",
+      "r_first_bps": -100.94,
+      "entry": 29412.75,
+      "stop_dist": 85.05,
+      "exit_kind": "EOD",
+      "pnl_pts": 32.8,
+      "r": 0.386
+     },
+     {
+      "date": "2026-10-19",
+      "signal": "LONG",
+      "r_first_bps": 112.75,
+      "entry": 29804.0,
+      "stop_dist": 56.37,
+      "exit_kind": "STOP",
+      "pnl_pts": -56.82,
+      "r": -1.008
+     }
+    ]
+   },
+   {
+    "id": "D",
+    "name": "Gold Asia PDHL reclaim",
+    "instrument": "GC 1H",
+    "spec": "Prior UTC-day high/low sweep and reclaim on a 1H close in the Asia session (18:00 to 02:59 ET); stop = extreme +/- 1.0 ATR; target 4R; hold up to 48 bars. Research only: not tradable under a flat-by-4:45 rule.",
+    "start": "2026-10-15",
+    "review_at": 30,
+    "backtest": {
+     "n": 230,
+     "ev": 0.306,
+     "pf": 1.48,
+     "wf": "6/8",
+     "per_week": 2.0,
+     "holdout": "N=40, PF 1.45 (spent)"
+    },
+    "forward": {
+     "n": 3,
+     "ev": -0.249,
+     "wr": 0.333,
+     "pf": 0.63,
+     "total_r": -0.75
+    },
+    "rows": [
+     {
+      "signal_bar": "2026-10-15 18:00:00-04:00",
+      "signal_date": "2026-10-15",
+      "side": "SHORT",
+      "utc0": false,
+      "exit_kind": "STOP",
+      "bars": 6,
+      "r": -1.004
+     },
+     {
+      "signal_bar": "2026-10-16 01:00:00-04:00",
+      "signal_date": "2026-10-16",
+      "side": "SHORT",
+      "utc0": false,
+      "exit_kind": "STOP",
+      "bars": 4,
+      "r": -1.006
+     },
+     {
+      "signal_bar": "2026-10-18 20:00:00-04:00",
+      "signal_date": "2026-10-18",
+      "side": "SHORT",
+      "utc0": true,
+      "exit_kind": "TIME",
+      "bars": 22,
+      "r": 1.264
+     }
+    ]
+   },
+   {
+    "id": "E",
+    "name": "Account spec (Tradeify plan)",
+    "instrument": "MNQ",
+    "spec": "Track B days only; stop 0.375 x daily ATR14; half off at +1R; rest at the 16:00 close; $500 fixed-dollar risk, 1 to 4 MNQ.",
+    "start": "2026-10-15",
+    "review_at": 30,
+    "backtest": {
+     "n": 165,
+     "ev": 0.238,
+     "pf": 1.83,
+     "wf": "3/3",
+     "per_week": 1.8,
+     "holdout": "in-sample only"
+    },
+    "forward": {
+     "n": 1,
+     "ev": 1.894,
+     "wr": 1.0,
+     "pf": 99.0,
+     "total_r": 1.89
+    },
+    "rows": [
+     {
+      "date": "2026-10-16",
+      "signal": "SHORT",
+      "rs": -52.21,
+      "median": 19.75,
+      "conv": true,
+      "entry": 29837.0,
+      "stop_dist": 241.36,
+      "exit_kind": "EOD",
+      "pnl_pts": 457.05,
+      "r": 1.894,
+      "mfe_r": 2.35,
+      "mae_r": 0.46,
+      "exit14_kind": "EOD",
+      "pnl14_pts": 384.05,
+      "r14": 1.591,
+      "acct_pts": 318.93,
+      "micros": 1.0,
+      "acct_usd": 636.82
+     }
+    ],
+    "usd": 636.82
+   }
+  ],
+  "next_session": {
+   "as_of": "2026-10-14",
+   "atr": 486.4,
+   "stop_pts": 182.4,
+   "stop_usd_mnq": 365.0,
+   "micros": 1,
+   "risk_usd": 500,
+   "qqq": {
+    "as_of": "2026-10-16",
+    "price": 709.8,
+    "atr": 10.55,
+    "stop": 5.27,
+    "shares": 94,
+    "notional": 66721.0
+   },
+   "rule": "Trade only if the 09:00 ET bar gives a conviction signal (|rs| above its 60-session median and the bar closes in the outer third of its range). Entry 10:00 open, half off at +1R, rest at the 16:00 close."
+  }
+ },
+ "accounts": [
+  {
+   "id": "alpaca-paper",
+   "broker": "Alpaca",
+   "mode": "paper",
+   "label": "Paper book \u00b7 sleeves A + B",
+   "status": "active",
+   "start_equity": 50000,
+   "equity": 50000.0,
+   "cash": 50000.0,
+   "buying_power": 200000.0,
+   "peak_equity": 50000.0,
+   "day_pl": 0.0,
+   "kill_switch": 7500,
+   "risk_per_trade": 500,
+   "max_shares": 400,
+   "day_trades_5d": 0,
+   "pdt_min": 25000,
+   "positions": 0,
+   "exposure": 0,
+   "goal_usd": 5500,
+   "updated": "2026-10-19",
+   "note": "Sleeve A: H13 futures signal executed in QQQ (intraday). Sleeve B: overnight QQQ + GLD. Kill switch 15R on A ($7,500), 10% equity stop on B. Bots scheduled on the Windows PC.",
+   "sleeves": [
+    {
+     "id": "A",
+     "name": "H13 in QQQ",
+     "kind": "intraday",
+     "symbols": [
+      "QQQ"
+     ],
+     "schedule": "10:00 enter \u00b7 15:58 close ET",
+     "rule": "NQ minus ES return over the 09:00 ET futures bar; trade only when |rs| is above its rolling 60-session median; QQQ market order at 10:00 in the direction of rs with an attached stop at 0.5 x daily ATR14; flat at 15:58.",
+     "risk": "$500 a trade (1% of equity), whole shares, cap 400",
+     "expect": "+0.09 to +0.12R a trade, PF 1.3 to 1.4, about 2.3 trades a week (NQ selection N 209, 2024-05 to 2026-03; holdout +0.19R, PF 1.83 on 56)",
+     "review": "30 trades, then 60",
+     "log": "alpaca_bot_log.csv",
+     "bot": "qqq_h13_bot.py"
+    },
+    {
+     "id": "B",
+     "name": "Overnight QQQ + GLD",
+     "kind": "overnight",
+     "symbols": [
+      "QQQ",
+      "GLD"
+     ],
+     "schedule": "15:59 buy \u00b7 09:30:30 sell ET, every session",
+     "rule": "Hold QQQ and GLD only while the US cash market is closed: buy at 15:59, sell at the next open. The return of both accrues overnight; the day session earns nothing.",
+     "risk": "40% of equity in each, 10% equity stop on the sleeve",
+     "expect": "QQQ +5.0 bps a night (t 4.5, 6,694 nights since 1999), GLD +3.7 (t 3.4, since 2004); book Sharpe 1.07 since 2004, holdout 1.05; about +7.7% a year at 80% allocation",
+     "review": "60 sessions",
+     "log": "overnight_bot_log.csv",
+     "bot": "overnight_bot.py"
+    }
+   ]
+  }
+ ],
+ "brokerage": {
+  "snapshots": {
+   "alpaca-paper": {
+    "synced": "2026-10-19 22:05 Eastern Daylight Time",
+    "mode": "paper",
+    "account_id": "alpaca-paper",
+    "account": {
+     "status": "active",
+     "equity": 50000.0,
+     "cash": 50000.0,
+     "buying_power": 200000.0,
+     "daytrading_buying_power": null,
+     "multiplier": 4.0,
+     "last_equity": 50000.0,
+     "day_pl": 0.0,
+     "pattern_day_trader": false,
+     "daytrade_count": 0,
+     "shorting_enabled": true,
+     "number_masked": "\u2026D9QW"
+    },
+    "positions": [],
+    "open_orders": [],
+    "fills": [],
+    "exposure": 0,
+    "bot": {
+     "last_run": "2026-10-19 19:44:08",
+     "last_action": "close",
+     "last_result": "dry-run",
+     "runs": 2,
+     "recent": [
+      {
+       "time": "2026-10-19 19:44:08",
+       "action": "enter",
+       "result": "no trade",
+       "date": "2026-10-19",
+       "rs_bps": -9.63,
+       "median_bps": 20.95,
+       "signal": false,
+       "side": -1.0,
+       "conv": true
+      },
+      {
+       "time": "2026-10-19 19:44:08",
+       "action": "close",
+       "result": "dry-run",
+       "date": null,
+       "rs_bps": null,
+       "median_bps": null,
+       "signal": null,
+       "side": null,
+       "conv": null
+      }
+     ]
+    },
+    "overnight": {
+     "last_run": "2026-10-19 20:53:51",
+     "last_action": "exit",
+     "last_result": "dry-run",
+     "runs": 2,
+     "recent": [
+      {
+       "time": "2026-10-19 20:53:51",
+       "action": "enter",
+       "result": "dry-run",
+       "friday": false,
+       "qty_QQQ": 27.0,
+       "qty_GLD": 52.0,
+       "px_QQQ": 718.32,
+       "px_GLD": 379.7
+      },
+      {
+       "time": "2026-10-19 20:53:51",
+       "action": "exit",
+       "result": "dry-run",
+       "friday": null,
+       "qty_QQQ": null,
+       "qty_GLD": null,
+       "px_QQQ": null,
+       "px_GLD": null
+      }
+     ]
+    }
+   }
+  },
+  "bot": {
+   "last_run": "2026-10-19 19:44:08",
+   "last_action": "close",
+   "last_result": "dry-run",
+   "runs": 2,
+   "recent": [
+    {
+     "time": "2026-10-19 19:44:08",
+     "action": "enter",
+     "result": "no trade",
+     "date": "2026-10-19",
+     "rs_bps": -9.63,
+     "median_bps": 20.95,
+     "signal": false,
+     "side": -1.0,
+     "conv": true
+    },
+    {
+     "time": "2026-10-19 19:44:08",
+     "action": "close",
+     "result": "dry-run",
+     "date": null,
+     "rs_bps": null,
+     "median_bps": null,
+     "signal": null,
+     "side": null,
+     "conv": null
+    }
+   ]
+  },
+  "overnight": {
+   "last_run": "2026-10-19 20:53:51",
+   "last_action": "exit",
+   "last_result": "dry-run",
+   "runs": 2,
+   "recent": [
+    {
+     "time": "2026-10-19 20:53:51",
+     "action": "enter",
+     "result": "dry-run",
+     "friday": false,
+     "qty_QQQ": 27.0,
+     "qty_GLD": 52.0,
+     "px_QQQ": 718.32,
+     "px_GLD": 379.7
+    },
+    {
+     "time": "2026-10-19 20:53:51",
+     "action": "exit",
+     "result": "dry-run",
+     "friday": null,
+     "qty_QQQ": null,
+     "qty_GLD": null,
+     "px_QQQ": null,
+     "px_GLD": null
+    }
+   ]
+  },
+  "sleeves": [
+   {
+    "id": "A",
+    "name": "H13 in QQQ",
+    "kind": "intraday",
+    "symbols": [
+     "QQQ"
+    ],
+    "schedule": "10:00 enter \u00b7 15:58 close ET",
+    "rule": "NQ minus ES return over the 09:00 ET futures bar; trade only when |rs| is above its rolling 60-session median; QQQ market order at 10:00 in the direction of rs with an attached stop at 0.5 x daily ATR14; flat at 15:58.",
+    "risk": "$500 a trade (1% of equity), whole shares, cap 400",
+    "expect": "+0.09 to +0.12R a trade, PF 1.3 to 1.4, about 2.3 trades a week (NQ selection N 209, 2024-05 to 2026-03; holdout +0.19R, PF 1.83 on 56)",
+    "review": "30 trades, then 60",
+    "log": "alpaca_bot_log.csv",
+    "bot": "qqq_h13_bot.py"
+   },
+   {
+    "id": "B",
+    "name": "Overnight QQQ + GLD",
+    "kind": "overnight",
+    "symbols": [
+     "QQQ",
+     "GLD"
+    ],
+    "schedule": "15:59 buy \u00b7 09:30:30 sell ET, every session",
+    "rule": "Hold QQQ and GLD only while the US cash market is closed: buy at 15:59, sell at the next open. The return of both accrues overnight; the day session earns nothing.",
+    "risk": "40% of equity in each, 10% equity stop on the sleeve",
+    "expect": "QQQ +5.0 bps a night (t 4.5, 6,694 nights since 1999), GLD +3.7 (t 3.4, since 2004); book Sharpe 1.07 since 2004, holdout 1.05; about +7.7% a year at 80% allocation",
+    "review": "60 sessions",
+    "log": "overnight_bot_log.csv",
+    "bot": "overnight_bot.py"
+   }
+  ]
+ },
+ "data": [
+  {
+   "file": "dxy_15m_to_2026-09-11.csv",
+   "to": "2026-09-11",
+   "mb": 0.46,
+   "modified": "2026-10-19 20:33"
+  },
+  {
+   "file": "dxy_1h_2y_to_2026-09-11.csv",
+   "to": "2026-09-11",
+   "mb": 1.46,
+   "modified": "2026-10-19 20:33"
+  },
+  {
+   "file": "es_15m_to_2026-09-11.csv",
+   "to": "2026-09-11",
+   "mb": 0.28,
+   "modified": "2026-10-19 20:33"
+  },
+  {
+   "file": "es_15m_to_2026-10-14.csv",
+   "to": "2026-10-14",
+   "mb": 0.28,
+   "modified": "2026-10-19 20:33"
+  },
+  {
+   "file": "es_1d_max_to_2026-10-14.csv",
+   "to": "2026-10-14",
+   "mb": 0.42,
+   "modified": "2026-10-19 20:33"
+  },
+  {
+   "file": "es_1h_2y_to_2026-09-11.csv",
+   "to": "2026-09-11",
+   "mb": 0.86,
+   "modified": "2026-10-19 20:33"
+  },
+  {
+   "file": "es_1h_2y_to_2026-10-14.csv",
+   "to": "2026-10-14",
+   "mb": 0.86,
+   "modified": "2026-10-19 20:33"
+  },
+  {
+   "file": "gc_15m_to_2026-09-11.csv",
+   "to": "2026-09-11",
+   "mb": 0.41,
+   "modified": "2026-10-19 20:33"
+  },
+  {
+   "file": "gc_1h_2y_to_2026-09-11.csv",
+   "to": "2026-09-11",
+   "mb": 1.26,
+   "modified": "2026-10-19 20:33"
+  },
+  {
+   "file": "gc_1h_2y_to_2026-10-14.csv",
+   "to": "2026-10-14",
+   "mb": 1.26,
+   "modified": "2026-10-19 20:33"
+  },
+  {
+   "file": "gc_5m_to_2026-09-11.csv",
+   "to": "2026-09-11",
+   "mb": 1.23,
+   "modified": "2026-10-19 20:33"
+  },
+  {
+   "file": "nq_15m_to_2026-09-11.csv",
+   "to": "2026-09-11",
+   "mb": 0.3,
+   "modified": "2026-10-19 20:33"
+  },
+  {
+   "file": "nq_15m_to_2026-10-14.csv",
+   "to": "2026-10-14",
+   "mb": 0.3,
+   "modified": "2026-10-19 20:33"
+  },
+  {
+   "file": "nq_1d_max_to_2026-10-14.csv",
+   "to": "2026-10-14",
+   "mb": 0.42,
+   "modified": "2026-10-19 20:33"
+  },
+  {
+   "file": "nq_1h_2y_to_2026-09-11.csv",
+   "to": "2026-09-11",
+   "mb": 0.91,
+   "modified": "2026-10-19 20:33"
+  },
+  {
+   "file": "nq_1h_2y_to_2026-10-14.csv",
+   "to": "2026-10-14",
+   "mb": 0.91,
+   "modified": "2026-10-19 20:33"
+  },
+  {
+   "file": "nq_2m_to_2026-10-14.csv",
+   "to": "2026-10-14",
+   "mb": 1.13,
+   "modified": "2026-10-19 20:33"
+  },
+  {
+   "file": "nq_5m_to_2026-10-14.csv",
+   "to": "2026-10-14",
+   "mb": 0.88,
+   "modified": "2026-10-19 20:33"
+  },
+  {
+   "file": "nq_60d_15m.csv",
+   "to": "",
+   "mb": 0.34,
+   "modified": "2026-10-19 20:33"
+  },
+  {
+   "file": "nq_60d_5m.csv",
+   "to": "",
+   "mb": 1.0,
+   "modified": "2026-10-19 20:33"
+  },
+  {
+   "file": "qqq_15m_to_2026-10-19.csv",
+   "to": "2026-10-19",
+   "mb": 0.16,
+   "modified": "2026-10-19 20:33"
+  },
+  {
+   "file": "qqq_1d_max_to_2026-10-19.csv",
+   "to": "2026-10-19",
+   "mb": 0.72,
+   "modified": "2026-10-19 20:33"
+  },
+  {
+   "file": "qqq_1h_2y_to_2026-10-19.csv",
+   "to": "2026-10-19",
+   "mb": 0.53,
+   "modified": "2026-10-19 20:33"
+  },
+  {
+   "file": "si_15m_to_2026-09-11.csv",
+   "to": "2026-09-11",
+   "mb": 0.46,
+   "modified": "2026-10-19 20:33"
+  },
+  {
+   "file": "si_1h_2y_to_2026-09-11.csv",
+   "to": "2026-09-11",
+   "mb": 1.41,
+   "modified": "2026-10-19 20:33"
+  },
+  {
+   "file": "spy_15m_to_2026-10-19.csv",
+   "to": "2026-10-19",
+   "mb": 0.16,
+   "modified": "2026-10-19 20:33"
+  },
+  {
+   "file": "spy_1d_max_to_2026-10-19.csv",
+   "to": "2026-10-19",
+   "mb": 0.84,
+   "modified": "2026-10-19 20:33"
+  },
+  {
+   "file": "spy_1h_2y_to_2026-10-19.csv",
+   "to": "2026-10-19",
+   "mb": 0.53,
+   "modified": "2026-10-19 20:33"
+  }
+ ]
+}

@@ -1,0 +1,81 @@
+{
+ "synced": "2026-10-19 22:05 Eastern Daylight Time",
+ "mode": "paper",
+ "account_id": "alpaca-paper",
+ "account": {
+  "status": "active",
+  "equity": 50000.0,
+  "cash": 50000.0,
+  "buying_power": 200000.0,
+  "daytrading_buying_power": null,
+  "multiplier": 4.0,
+  "last_equity": 50000.0,
+  "day_pl": 0.0,
+  "pattern_day_trader": false,
+  "daytrade_count": 0,
+  "shorting_enabled": true,
+  "number_masked": "\u2026D9QW"
+ },
+ "positions": [],
+ "open_orders": [],
+ "fills": [],
+ "exposure": 0,
+ "bot": {
+  "last_run": "2026-10-19 19:44:08",
+  "last_action": "close",
+  "last_result": "dry-run",
+  "runs": 2,
+  "recent": [
+   {
+    "time": "2026-10-19 19:44:08",
+    "action": "enter",
+    "result": "no trade",
+    "date": "2026-10-19",
+    "rs_bps": -9.63,
+    "median_bps": 20.95,
+    "signal": false,
+    "side": -1.0,
+    "conv": true
+   },
+   {
+    "time": "2026-10-19 19:44:08",
+    "action": "close",
+    "result": "dry-run",
+    "date": null,
+    "rs_bps": null,
+    "median_bps": null,
+    "signal": null,
+    "side": null,
+    "conv": null
+   }
+  ]
+ },
+ "overnight": {
+  "last_run": "2026-10-19 20:53:51",
+  "last_action": "exit",
+  "last_result": "dry-run",
+  "runs": 2,
+  "recent": [
+   {
+    "time": "2026-10-19 20:53:51",
+    "action": "enter",
+    "result": "dry-run",
+    "friday": false,
+    "qty_QQQ": 27.0,
+    "qty_GLD": 52.0,
+    "px_QQQ": 718.32,
+    "px_GLD": 379.7
+   },
+   {
+    "time": "2026-10-19 20:53:51",
+    "action": "exit",
+    "result": "dry-run",
+    "friday": null,
+    "qty_QQQ": null,
+    "qty_GLD": null,
+    "px_QQQ": null,
+    "px_GLD": null
+   }
+  ]
+ }
+}

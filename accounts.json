@@ -1,0 +1,58 @@
+[
+ {
+  "id": "alpaca-paper",
+  "broker": "Alpaca",
+  "mode": "paper",
+  "label": "Paper book \u00b7 sleeves A + B",
+  "status": "active",
+  "start_equity": 50000,
+  "equity": 50000.0,
+  "cash": 50000.0,
+  "buying_power": 200000.0,
+  "peak_equity": 50000.0,
+  "day_pl": 0.0,
+  "kill_switch": 7500,
+  "risk_per_trade": 500,
+  "max_shares": 400,
+  "day_trades_5d": 0,
+  "pdt_min": 25000,
+  "positions": 0,
+  "exposure": 0,
+  "goal_usd": 5500,
+  "updated": "2026-10-19",
+  "note": "Sleeve A: H13 futures signal executed in QQQ (intraday). Sleeve B: overnight QQQ + GLD. Kill switch 15R on A ($7,500), 10% equity stop on B. Bots scheduled on the Windows PC.",
+  "sleeves": [
+   {
+    "id": "A",
+    "name": "H13 in QQQ",
+    "kind": "intraday",
+    "symbols": [
+     "QQQ"
+    ],
+    "schedule": "10:00 enter \u00b7 15:58 close ET",
+    "rule": "NQ minus ES return over the 09:00 ET futures bar; trade only when |rs| is above its rolling 60-session median; QQQ market order at 10:00 in the direction of rs with an attached stop at 0.5 x daily ATR14; flat at 15:58.",
+    "risk": "$500 a trade (1% of equity), whole shares, cap 400",
+    "expect": "+0.09 to +0.12R a trade, PF 1.3 to 1.4, about 2.3 trades a week (NQ selection N 209, 2024-05 to 2026-03; holdout +0.19R, PF 1.83 on 56)",
+    "review": "30 trades, then 60",
+    "log": "alpaca_bot_log.csv",
+    "bot": "qqq_h13_bot.py"
+   },
+   {
+    "id": "B",
+    "name": "Overnight QQQ + GLD",
+    "kind": "overnight",
+    "symbols": [
+     "QQQ",
+     "GLD"
+    ],
+    "schedule": "15:59 buy \u00b7 09:30:30 sell ET, every session",
+    "rule": "Hold QQQ and GLD only while the US cash market is closed: buy at 15:59, sell at the next open. The return of both accrues overnight; the day session earns nothing.",
+    "risk": "40% of equity in each, 10% equity stop on the sleeve",
+    "expect": "QQQ +5.0 bps a night (t 4.5, 6,694 nights since 1999), GLD +3.7 (t 3.4, since 2004); book Sharpe 1.07 since 2004, holdout 1.05; about +7.7% a year at 80% allocation",
+    "review": "60 sessions",
+    "log": "overnight_bot_log.csv",
+    "bot": "overnight_bot.py"
+   }
+  ]
+ }
+]
