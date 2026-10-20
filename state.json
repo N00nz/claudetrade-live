@@ -1,5 +1,5 @@
 {
- "generated": "2026-10-20 00:00 EDT",
+ "generated": "2026-10-20 00:07 EDT",
  "firm": {
   "name": "Baller Funds",
   "city": "New York",
@@ -109,12 +109,12 @@
     "id": "S08",
     "name": "Pre-FOMC announcement drift",
     "family": "event",
-    "status": "pre-registered",
+    "status": "failed",
     "rule": "Long from 14:00 ET on the day before a scheduled FOMC statement to 14:00 ET on the statement day (before the release). Daily read: the day-before session and the statement-day overnight.",
-    "gate": "",
-    "verdict": "",
-    "selection": "",
-    "holdout": "",
+    "gate": "fail: holdout",
+    "verdict": "real in the long sample, reversed in the last 12 months; sleeve B already holds QQQ on those nights; watch",
+    "selection": "2016-01 to 2025-10, 77 meetings, 14:00 to 14:00: SPY +23.6 bps (CI +9 to +40, PF 3.0, t 3.2), QQQ +34.2 (PF 2.8, t 3.2), WF 3/3; daily read 1994 to 2025 (253 meetings): overnight into the statement day +13.7 vs +3.7 bps (diff t 2.6)",
+    "holdout": "last 8 meetings: SPY -18.7 bps PF 0.23, QQQ -1.5",
     "sizing": "",
     "bot": "",
     "provenance": "Lucca and Moench (2015) The Pre-FOMC Announcement Drift; later work reports weakening after 2015"
@@ -165,12 +165,12 @@
     "id": "S12",
     "name": "First-half-hour momentum in QQQ (H1 on ETF minute data)",
     "family": "intraday momentum",
-    "status": "pre-registered",
+    "status": "failed",
     "rule": "Direction = sign of the 09:30 to 10:00 return from the prior close; enter at 15:30; stop 1.0 x ATR14 on 15-minute bars; exit at the 15:58 close.",
-    "gate": "",
-    "verdict": "",
-    "selection": "",
-    "holdout": "",
+    "gate": "fail: EV, PF, WF, holdout",
+    "verdict": "retired for ETFs",
+    "selection": "2016 to 2025-10: SPY N 2,441 EV -0.025R PF 0.94; QQQ N 2,438 EV -0.014R PF 0.96; stops 0.75 and 1.25 x ATR worse",
+    "holdout": "SPY -0.055R, QQQ +0.015R",
     "sizing": "",
     "bot": "",
     "provenance": "Gao, Han, Li, Zhou (2018); own Track C on NQ 15m"
@@ -179,12 +179,12 @@
     "id": "S13",
     "name": "Last-30-minutes momentum in SPY and QQQ",
     "family": "intraday momentum",
-    "status": "pre-registered",
+    "status": "failed",
     "rule": "At 15:30 ET take the sign of the day's first half-hour return (09:30 to 10:00, from the prior close); hold to 16:00. No stop (30-minute hold).",
-    "gate": "",
-    "verdict": "",
-    "selection": "",
-    "holdout": "",
+    "gate": "fail: EV, PF",
+    "verdict": "retired",
+    "selection": "2016 to 2025-10: SPY -0.6 bps on 2,441, QQQ -0.3 on 2,438; with the 15:00 to 15:29 agreement +0.2 and +0.3 bps (t 0.2 to 0.3)",
+    "holdout": "-0.6, +0.8 bps",
     "sizing": "",
     "bot": "",
     "provenance": "Gao, Han, Li, Zhou (2018) market intraday momentum: the first half-hour return predicts the last half-hour"
@@ -193,12 +193,12 @@
     "id": "S14",
     "name": "Opening gap continuation and fade in QQQ",
     "family": "intraday",
-    "status": "pre-registered",
+    "status": "tested",
     "rule": "Gap = 09:30 open versus the prior close in ATR units. Read both directions over the first hour and to the close, by gap size bucket, before any rule is proposed.",
-    "gate": "",
-    "verdict": "",
-    "selection": "",
-    "holdout": "",
+    "gate": "read only; too rare for a rule",
+    "verdict": "no rule; about five mornings a year",
+    "selection": "2016 to 2025-10: QQQ gap below -1 ATR, open to 10:29 +46.5 bps (t 3.8, n 49); SPY +15.6 (t 1.5, n 59); other buckets |t| < 2",
+    "holdout": "n 7, +13.9 bps",
     "sizing": "",
     "bot": "",
     "provenance": "practitioner gap literature; the kit retired fades on NQ (#20), this is the ETF read"
@@ -230,9 +230,37 @@
     "sizing": "",
     "bot": "",
     "provenance": "Ariel (1990) High stock returns before holidays"
+   },
+   {
+    "id": "S10b",
+    "name": "Overnight premium in 15 mega-cap stocks",
+    "family": "overnight drift",
+    "status": "tested",
+    "rule": "Close to next open, long, every session, net of cost; a leg joins sleeve B only under the S10 book rule.",
+    "gate": "no leg joins: book drawdown rises (+GOOGL 23.8% vs 19.5%, +AVGO 20.9%)",
+    "verdict": "a stock sleeve needs an ex-ante universe rule; today's mega-cap list is hindsight",
+    "selection": "2004 or listing to 2025-10: GOOGL Sharpe 1.12 (t 5.1) and AVGO 1.40 (t 5.6) pass alone; AAPL and NVDA fail on drawdown; TSLA fails the holdout; equal-weight 15-stock book Sharpe 1.20 vs QQQ 0.89 (survivorship-biased)",
+    "holdout": "GOOGL +7.8 bps, AVGO +19.6",
+    "sizing": "",
+    "bot": "",
+    "provenance": "as S02; Lou, Polk, Skouras (2019) on the cross-section of overnight returns"
+   },
+   {
+    "id": "S06b",
+    "name": "RSI(2) pullback in an uptrend, 15 mega-cap stocks",
+    "family": "short-term mean reversion",
+    "status": "passed",
+    "rule": "Buy at the close when RSI(2) < 10 and the close is above the 200-day SMA; sell at the close when the close is above the 5-day SMA. One lot per stock.",
+    "gate": "PASS (pooled); 1.7 trades a week across the names",
+    "verdict": "deployment deferred to sleeve C's first review at 30 ETF trades",
+    "selection": "pooled N 3,877 (1993 to 2025-10): EV +63 bps, CI +52 to +75, PF 1.70, t 11.0, WF 3/3; 15 of 15 stocks EV > 0, 11 of 15 pass alone",
+    "holdout": "131 trades, +128 bps, PF 3.6",
+    "sizing": "to be set at deployment: 10% of equity notional per stock, at most five open at once",
+    "bot": "",
+    "provenance": "as S06"
    }
   ],
-  "stamp": "Updated 2026-10-19 \u00b7 entry #37 \u00b7 Mandate 3 \u00b7 strategy register, batch 1 \u00b7 sleeve C (RSI(2)) on paper",
+  "stamp": "Updated 2026-10-20 \u00b7 entry #40 \u00b7 Mandate 3 \u00b7 batches 1 to 2 done \u00b7 sleeve C (RSI(2)) on paper",
   "status": {
    "now": {
     "title": "Mandate 2 ranked: H13 in QQQ is the only per-trade edge; the overnight premium is the robust carry (QQQ + GLD book); crypto has no retail-cost edge",
@@ -1044,6 +1072,10 @@
   ],
   "log": [
    {
+    "when": "2026-10-20 \u00b7 #38 to #40",
+    "text": "Batches 1c and 2. Stocks: the RSI(2) rule generalises across 15 mega-caps (pooled +63 bps a trade on 3,877 trades, every name positive, holdout +128 bps on 131); overnight premiums are strongest in GOOGL and AVGO but any list of today's winners is hindsight, so no stock leg joins sleeve B. Minute bars 2016 to 2026: the pre-FOMC drift is real over 30 years (+13.7 bps into the statement night vs +3.7) and reversed in the last eight meetings; sleeve B already holds those nights. First-half-hour momentum entered at 15:30 and the last-30-minutes rule both lose net of costs in SPY and QQQ: retired. Gaps: QQQ gap-downs beyond 1 ATR bounce +47 bps by 10:29 (t 3.8) but only five times a year. Events calendar built from primary sources (263 FOMC days since 1994, CPI, NFP, PCE); every closed bot trade now gets an event-and-news attribution row."
+   },
+   {
     "when": "2026-10-19 \u00b7 #37",
     "text": "Batch 1 results. One pass out of eleven pre-registered tests: Connors RSI(2) pullback in an uptrend (RSI(2) < 10 above the 200-day, exit above the 5-day). SPY +66 bps a trade on 253 trades since 1993 (CI +47 to +84, PF 3.12, t 6.8, walk-forward 3/3), QQQ +60 bps on 201 since 2000 (PF 2.23); holdout 12 and 11 trades at +90 and +77 bps; neighbours pass. It is sleeve C on paper from the next session (25% of equity per ETF, 15:57 ET run). Everything else failed its gate as written: trend filters halve drawdown but stay under Sharpe 1 (GTAA-5 0.66, SPY SMA 0.82 vs 0.63), dual momentum equals SPY, sector momentum 0.68 to 0.74 (fails Sharpe only), turn of the month is mostly the market's drift (excess t 1.0), the VIX overlay is rejected because stress nights pay more (+6.0 bps in backwardation), no ETF joins the overnight book (GDX passes alone but adds drawdown; bonds and commodities lose overnight), no weekday or pre-holiday filter, vol scaling +0.09 Sharpe (under the +0.10 line). Ledger: docs/strategy_ledger.md. Register: strategies/registry.json."
    },
@@ -1298,11 +1330,35 @@
     "level": "bad"
    },
    {
+    "id": "S08",
+    "name": "Pre-FOMC announcement drift",
+    "rule": "Long from 14:00 ET on the day before a scheduled FOMC statement to 14:00 ET on the statement day (before the release). Daily read: the day-before session and th",
+    "freq": "",
+    "status": "failed: fail: holdout",
+    "level": "bad"
+   },
+   {
     "id": "S09",
     "name": "VIX term-structure overlay on the overnight book",
     "rule": "Hold the overnight book only when VIX < VIX3M at the close (contango). Skip the night in backwardation.",
     "freq": "",
     "status": "rejected: adoption rule not met",
+    "level": "bad"
+   },
+   {
+    "id": "S12",
+    "name": "First-half-hour momentum in QQQ (H1 on ETF minute data)",
+    "rule": "Direction = sign of the 09:30 to 10:00 return from the prior close; enter at 15:30; stop 1.0 x ATR14 on 15-minute bars; exit at the 15:58 close.",
+    "freq": "",
+    "status": "failed: fail: EV, PF, WF, holdout",
+    "level": "bad"
+   },
+   {
+    "id": "S13",
+    "name": "Last-30-minutes momentum in SPY and QQQ",
+    "rule": "At 15:30 ET take the sign of the day's first half-hour return (09:30 to 10:00, from the prior close); hold to 16:00. No stop (30-minute hold).",
+    "freq": "",
+    "status": "failed: fail: EV, PF",
     "level": "bad"
    }
   ],
@@ -2286,7 +2342,7 @@
  "brokerage": {
   "snapshots": {
    "alpaca-paper": {
-    "synced": "2026-10-20 00:00 EDT",
+    "synced": "2026-10-20 00:07 EDT",
     "mode": "paper",
     "account_id": "alpaca-paper",
     "account": {
