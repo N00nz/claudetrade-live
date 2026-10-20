@@ -1,5 +1,5 @@
 {
- "generated": "2026-10-20 00:07 EDT",
+ "generated": "2026-10-20 18:44 EDT",
  "firm": {
   "name": "Baller Funds",
   "city": "New York",
@@ -2289,18 +2289,18 @@
    "label": "Paper book \u00b7 sleeves A + B",
    "status": "active",
    "start_equity": 50000,
-   "equity": 49999.57,
-   "cash": 49999.57,
-   "buying_power": 199998.28,
+   "equity": 49685.63,
+   "cash": 10510.17,
+   "buying_power": 151731.96,
    "peak_equity": 50000.0,
-   "day_pl": -0.43,
+   "day_pl": -314.37,
    "kill_switch": 7500,
    "risk_per_trade": 500,
    "max_shares": 400,
    "day_trades_5d": 0,
    "pdt_min": 25000,
-   "positions": 0,
-   "exposure": 0,
+   "positions": 2,
+   "exposure": 39175.46,
    "goal_usd": 5500,
    "updated": "2026-10-20",
    "note": "Sleeve A: H13 futures signal executed in QQQ (intraday). Sleeve B: overnight QQQ + GLD. Kill switch 15R on A ($7,500), 10% equity stop on B. Bots scheduled on the Windows PC.",
@@ -2342,26 +2342,83 @@
  "brokerage": {
   "snapshots": {
    "alpaca-paper": {
-    "synced": "2026-10-20 00:07 EDT",
+    "synced": "2026-10-20 18:44 EDT",
     "mode": "paper",
     "account_id": "alpaca-paper",
     "account": {
      "status": "active",
-     "equity": 49999.57,
-     "cash": 49999.57,
-     "buying_power": 199998.28,
+     "equity": 49685.63,
+     "cash": 10510.17,
+     "buying_power": 151731.96,
      "daytrading_buying_power": null,
      "multiplier": 4.0,
      "last_equity": 50000.0,
-     "day_pl": -0.43,
+     "day_pl": -314.37,
      "pattern_day_trader": false,
      "daytrade_count": 0,
      "shorting_enabled": true,
      "number_masked": "\u2026D9QW"
     },
-    "positions": [],
+    "positions": [
+     {
+      "symbol": "GLD",
+      "side": "long",
+      "qty": 52.0,
+      "avg_entry": 377.67327,
+      "price": 377.9553,
+      "market_value": 19653.6756,
+      "unrealized_pl": 14.66556,
+      "unrealized_plpc": 0.00075
+     },
+     {
+      "symbol": "QQQ",
+      "side": "long",
+      "qty": 27.0,
+      "avg_entry": 716.97,
+      "price": 723.029,
+      "market_value": 19521.783,
+      "unrealized_pl": 163.593,
+      "unrealized_plpc": 0.00845
+     }
+    ],
     "open_orders": [],
     "fills": [
+     {
+      "time": "2026-10-20 19:59",
+      "symbol": "GLD",
+      "side": "buy",
+      "qty": 52.0,
+      "price": 377.67327,
+      "type": "market",
+      "order_class": "simple"
+     },
+     {
+      "time": "2026-10-20 19:59",
+      "symbol": "QQQ",
+      "side": "buy",
+      "qty": 27.0,
+      "price": 716.97,
+      "type": "market",
+      "order_class": "simple"
+     },
+     {
+      "time": "2026-10-20 14:27",
+      "symbol": "QQQ",
+      "side": "buy",
+      "qty": 92.0,
+      "price": 721.21,
+      "type": "stop",
+      "order_class": "oto"
+     },
+     {
+      "time": "2026-10-20 14:00",
+      "symbol": "QQQ",
+      "side": "sell",
+      "qty": 92.0,
+      "price": 715.86,
+      "type": "market",
+      "order_class": "oto"
+     },
      {
       "time": "2026-10-20 02:16",
       "symbol": "BTC/USD",
@@ -2381,7 +2438,7 @@
       "order_class": "simple"
      }
     ],
-    "exposure": 0,
+    "exposure": 39175.46,
     "history": [
      {
       "date": "2026-10-12",
@@ -2409,6 +2466,12 @@
      },
      {
       "date": "2026-10-16",
+      "equity": 50000.0,
+      "pl": 0.0,
+      "pl_pct": 0.0
+     },
+     {
+      "date": "2026-10-19",
       "equity": 50000.0,
       "pl": 0.0,
       "pl_pct": 0.0
