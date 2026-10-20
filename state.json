@@ -1,5 +1,5 @@
 {
- "generated": "2026-10-20 18:44 EDT",
+ "generated": "2026-10-20 19:00 EDT",
  "firm": {
   "name": "Baller Funds",
   "city": "New York",
@@ -2289,18 +2289,18 @@
    "label": "Paper book \u00b7 sleeves A + B",
    "status": "active",
    "start_equity": 50000,
-   "equity": 49685.63,
+   "equity": 49668.16,
    "cash": 10510.17,
-   "buying_power": 151731.96,
+   "buying_power": 151683.05,
    "peak_equity": 50000.0,
-   "day_pl": -314.37,
+   "day_pl": -331.84,
    "kill_switch": 7500,
    "risk_per_trade": 500,
    "max_shares": 400,
    "day_trades_5d": 0,
    "pdt_min": 25000,
    "positions": 2,
-   "exposure": 39175.46,
+   "exposure": 39157.99,
    "goal_usd": 5500,
    "updated": "2026-10-20",
    "note": "Sleeve A: H13 futures signal executed in QQQ (intraday). Sleeve B: overnight QQQ + GLD. Kill switch 15R on A ($7,500), 10% equity stop on B. Bots scheduled on the Windows PC.",
@@ -2342,18 +2342,18 @@
  "brokerage": {
   "snapshots": {
    "alpaca-paper": {
-    "synced": "2026-10-20 18:44 EDT",
+    "synced": "2026-10-20 19:00 EDT",
     "mode": "paper",
     "account_id": "alpaca-paper",
     "account": {
      "status": "active",
-     "equity": 49685.63,
+     "equity": 49668.16,
      "cash": 10510.17,
-     "buying_power": 151731.96,
+     "buying_power": 151683.05,
      "daytrading_buying_power": null,
      "multiplier": 4.0,
      "last_equity": 50000.0,
-     "day_pl": -314.37,
+     "day_pl": -331.84,
      "pattern_day_trader": false,
      "daytrade_count": 0,
      "shorting_enabled": true,
@@ -2365,20 +2365,20 @@
       "side": "long",
       "qty": 52.0,
       "avg_entry": 377.67327,
-      "price": 377.9553,
-      "market_value": 19653.6756,
-      "unrealized_pl": 14.66556,
-      "unrealized_plpc": 0.00075
+      "price": 377.65,
+      "market_value": 19637.8,
+      "unrealized_pl": -1.21004,
+      "unrealized_plpc": -6e-05
      },
      {
       "symbol": "QQQ",
       "side": "long",
       "qty": 27.0,
       "avg_entry": 716.97,
-      "price": 723.029,
-      "market_value": 19521.783,
-      "unrealized_pl": 163.593,
-      "unrealized_plpc": 0.00845
+      "price": 722.97,
+      "market_value": 19520.19,
+      "unrealized_pl": 162.0,
+      "unrealized_plpc": 0.00837
      }
     ],
     "open_orders": [],
@@ -2438,7 +2438,7 @@
       "order_class": "simple"
      }
     ],
-    "exposure": 39175.46,
+    "exposure": 39157.99,
     "history": [
      {
       "date": "2026-10-12",
