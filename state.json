@@ -1,5 +1,5 @@
 {
- "generated": "2026-10-19 22:15 EDT",
+ "generated": "2026-10-19 22:27 EDT",
  "firm": {
   "name": "Baller Funds",
   "city": "New York",
@@ -1956,18 +1956,18 @@
    "label": "Paper book \u00b7 sleeves A + B",
    "status": "active",
    "start_equity": 50000,
-   "equity": 49999.76,
-   "cash": 49901.95,
-   "buying_power": 199607.8,
+   "equity": 49999.57,
+   "cash": 49999.57,
+   "buying_power": 199998.28,
    "peak_equity": 50000.0,
-   "day_pl": -0.24,
+   "day_pl": -0.43,
    "kill_switch": 7500,
    "risk_per_trade": 500,
    "max_shares": 400,
    "day_trades_5d": 0,
    "pdt_min": 25000,
-   "positions": 1,
-   "exposure": 97.81,
+   "positions": 0,
+   "exposure": 0,
    "goal_usd": 5500,
    "updated": "2026-10-19",
    "note": "Sleeve A: H13 futures signal executed in QQQ (intraday). Sleeve B: overnight QQQ + GLD. Kill switch 15R on A ($7,500), 10% equity stop on B. Bots scheduled on the Windows PC.",
@@ -2009,37 +2009,35 @@
  "brokerage": {
   "snapshots": {
    "alpaca-paper": {
-    "synced": "2026-10-19 22:15 EDT",
+    "synced": "2026-10-19 22:27 EDT",
     "mode": "paper",
     "account_id": "alpaca-paper",
     "account": {
      "status": "active",
-     "equity": 49999.76,
-     "cash": 49901.95,
-     "buying_power": 199607.8,
+     "equity": 49999.57,
+     "cash": 49999.57,
+     "buying_power": 199998.28,
      "daytrading_buying_power": null,
      "multiplier": 4.0,
      "last_equity": 50000.0,
-     "day_pl": -0.24,
+     "day_pl": -0.43,
      "pattern_day_trader": false,
      "daytrade_count": 0,
      "shorting_enabled": true,
      "number_masked": "\u2026D9QW"
     },
-    "positions": [
-     {
-      "symbol": "BTCUSD",
-      "side": "long",
-      "qty": 0.001199736,
-      "avg_entry": 81523.44,
-      "price": 81522.7,
-      "market_value": 97.805718,
-      "unrealized_pl": -0.000888,
-      "unrealized_plpc": -1e-05
-     }
-    ],
+    "positions": [],
     "open_orders": [],
     "fills": [
+     {
+      "time": "2026-10-20 02:16",
+      "symbol": "BTC/USD",
+      "side": "sell",
+      "qty": 0.001199736,
+      "price": 81572.696973854,
+      "type": "market",
+      "order_class": "simple"
+     },
      {
       "time": "2026-10-20 02:06",
       "symbol": "BTC/USD",
@@ -2050,7 +2048,7 @@
       "order_class": "simple"
      }
     ],
-    "exposure": 97.81,
+    "exposure": 0,
     "history": [
      {
       "date": "2026-10-12",
