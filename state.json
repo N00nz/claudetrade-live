@@ -1,12 +1,238 @@
 {
- "generated": "2026-10-19 22:27 EDT",
+ "generated": "2026-10-20 00:00 EDT",
  "firm": {
   "name": "Baller Funds",
   "city": "New York",
   "tagline": "Quant desk for Nasdaq-100 and gold futures"
  },
  "research": {
-  "stamp": "Updated 2026-10-19 \u00b7 entry #33 \u00b7 Mandate 2 \u00b7 five markets ranked \u00b7 paper book on Alpaca",
+  "strategies": [
+   {
+    "id": "S01",
+    "name": "H13 relative momentum in QQQ (sleeve A)",
+    "family": "intraday momentum",
+    "status": "paper",
+    "rule": "rs = NQ 09:00 ET hourly bar return minus the ES return of the same bar. Trade only when |rs| >= the rolling 60-session median of |rs| (30-session warm-up). Long QQQ if rs > 0, short if rs < 0, market order at 10:00. Stop",
+    "gate": "just under EV and PF on the ETF execution; passed on NQ",
+    "verdict": "",
+    "selection": "2024-05-22 to 2026-03-31, N 212, EV +0.091R, CI -0.026 to +0.218, PF 1.29, WF 3/3, MDD 6.3R, 2.3 a week",
+    "holdout": "2026-04-01 to 2026-10-19, N 56, EV +0.188R, PF 1.83, MDD 2.8R",
+    "sizing": "$500 risk a trade: shares = 500 / (0.5 x ATR14)",
+    "bot": "research/qqq_h13_bot.py",
+    "provenance": "Intraday momentum (Gao, Han, Li, Zhou 2018); own first-hour NQ-vs-ES variant, NQ-lab #21-#23, ETF execution #30-#33"
+   },
+   {
+    "id": "S02",
+    "name": "Overnight QQQ + GLD book (sleeve B)",
+    "family": "overnight drift",
+    "status": "paper",
+    "rule": "Buy QQQ and GLD at 15:59 ET, 40% of equity each; sell both at 09:30:30 ET. No signal, no stop; 10% equity stop on the sleeve.",
+    "gate": "passes all but the 1.5x drawdown line (rescaled to 3x in #35)",
+    "verdict": "",
+    "selection": "2004-01-02 to 2025-10-17, 5,261 nights, +3.84 bps a night, t 4.87, Sharpe 1.07, +9.7% a year, log MDD 22%, 82% of years positive",
+    "holdout": "2025-10-20 to 2026-10-17, 250 nights, +6.41 bps, Sharpe 1.05",
+    "sizing": "40% of equity in each leg",
+    "bot": "research/overnight_bot.py",
+    "provenance": "Cooper, Cliff, Gulen (2008) return differences between trading and non-trading hours; Lou, Polk, Skouras (2019); own NQ-lab #32-#33"
+   },
+   {
+    "id": "S03",
+    "name": "Trend filter, 10-month SMA (Faber GTAA)",
+    "family": "time-series momentum / trend",
+    "status": "failed",
+    "rule": "On the last trading day of each month: hold the asset if its close is above the 10-month simple moving average of month-end closes, else cash at the T-bill yield. GTAA-5 holds 20% in each of the five assets. Single-asset",
+    "gate": "fail: Sharpe, t",
+    "verdict": "risk reducer, not an edge; candidate overlay for a drawdown budget",
+    "selection": "GTAA-5 2006-11 to 2025-10: Sharpe 0.66, +5.3% a year, MDD 15.2% (buy-and-hold 0.46, +6.8%, 45.8%); SPY single: Sharpe 0.82, MDD 24% vs 0.63, 55%",
+    "holdout": "GTAA-5 +5.0 bps a day, Sharpe 1.86",
+    "sizing": "to be set if adopted (sleeve C candidate)",
+    "bot": "",
+    "provenance": "Faber (2007, updated 2013) A Quantitative Approach to Tactical Asset Allocation; Moskowitz, Ooi, Pedersen (2012) time-series momentum"
+   },
+   {
+    "id": "S04",
+    "name": "Dual momentum (GEM)",
+    "family": "cross-sectional + absolute momentum",
+    "status": "failed",
+    "rule": "On the last trading day of each month compute 12-month returns. If SPY's 12-month return beats the T-bill 12-month return: hold SPY if it beats EFA over 12 months, else EFA. Otherwise hold AGG. 100% in one asset.",
+    "gate": "fail: Sharpe, t, MDD",
+    "verdict": "same Sharpe as SPY with less return",
+    "selection": "2004-10 to 2025-10, 5,296 days, 35 switches: Sharpe 0.64, +9.9%, MDD 33.7% (SPY 0.64, +12.2%, 55.2%)",
+    "holdout": "+6.6 bps, Sharpe 1.11",
+    "sizing": "",
+    "bot": "",
+    "provenance": "Antonacci (2014) Dual Momentum Investing; Jegadeesh and Titman (1993) momentum"
+   },
+   {
+    "id": "S05",
+    "name": "Sector momentum, top 3 of 9 SPDRs",
+    "family": "cross-sectional momentum",
+    "status": "failed",
+    "rule": "On the last trading day of each month rank the nine sectors by the 6-month return ending one month earlier (skip the last month). Hold the top three, one third each. Trend filter: all cash when SPY's month-end close is b",
+    "gate": "fail: Sharpe only",
+    "verdict": "best of the allocation family; watch; not a sleeve",
+    "selection": "1999-07 to 2025-10, 6,595 days: Sharpe 0.68, +9.3%, MDD 22.9%, t 3.5, 78% of years (SPY 0.51, +9.8%, 55.2%); 12-1 variant Sharpe 0.73",
+    "holdout": "+2.5 bps, Sharpe 0.54 (12-1: +7.8, 1.54)",
+    "sizing": "",
+    "bot": "",
+    "provenance": "Moskowitz and Grinblatt (1999) industry momentum; Faber (2010) relative strength sector rotation"
+   },
+   {
+    "id": "S06",
+    "name": "RSI(2) pullback in an uptrend (Connors)",
+    "family": "short-term mean reversion",
+    "status": "paper",
+    "rule": "Buy at the close when RSI(2) < 10 and the close is above the 200-day SMA. Sell at the close when the close is above the 5-day SMA. One position per ETF.",
+    "gate": "PASS (neighbours 8 and 12 pass)",
+    "verdict": "",
+    "selection": "SPY 1993-11 to 2025-10, N 253: EV +66 bps, CI +47 to +84, WR 77%, PF 3.12, t 6.8, WF 3/3, 0.15 a week; QQQ 2000-01 to 2025-10, N 201: EV +60 bps, CI +32 to +87, PF 2.23, t 4.3, WF 3/3",
+    "holdout": "SPY 12 trades +90 bps PF 8.7; QQQ 11 trades +77 bps PF 6.0",
+    "sizing": "25% of equity notional per ETF, whole shares, both ETFs may be held at once (50% max)",
+    "bot": "research/rsi2_bot.py",
+    "provenance": "Connors and Alvarez (2009) Short Term Trading Strategies That Work; short-term reversal literature (Jegadeesh 1990)"
+   },
+   {
+    "id": "S07",
+    "name": "Turn of the month",
+    "family": "calendar",
+    "status": "failed",
+    "rule": "Buy at the close of the second-to-last trading day of the month; sell at the close of the third trading day of the next month.",
+    "gate": "fail: excess over the unconditional drift",
+    "verdict": "mostly the market's own drift; no overlay (intraday leg diff t 1.3)",
+    "selection": "SPY 1993 to 2025-10, N 392: EV +29 bps net, PF 1.43; gross +29 vs +18 unconditional, excess t 1.0; S&P index since 1950: +44 vs +15, excess t 4.6, declining by decade",
+    "holdout": "12 trades +102 bps",
+    "sizing": "",
+    "bot": "",
+    "provenance": "Ariel (1987); Lakonishok and Smidt (1988); McConnell and Xu (2008) Equity returns at the turn of the month"
+   },
+   {
+    "id": "S08",
+    "name": "Pre-FOMC announcement drift",
+    "family": "event",
+    "status": "pre-registered",
+    "rule": "Long from 14:00 ET on the day before a scheduled FOMC statement to 14:00 ET on the statement day (before the release). Daily read: the day-before session and the statement-day overnight.",
+    "gate": "",
+    "verdict": "",
+    "selection": "",
+    "holdout": "",
+    "sizing": "",
+    "bot": "",
+    "provenance": "Lucca and Moench (2015) The Pre-FOMC Announcement Drift; later work reports weakening after 2015"
+   },
+   {
+    "id": "S09",
+    "name": "VIX term-structure overlay on the overnight book",
+    "family": "regime filter",
+    "status": "rejected",
+    "rule": "Hold the overnight book only when VIX < VIX3M at the close (contango). Skip the night in backwardation.",
+    "gate": "adoption rule not met",
+    "verdict": "stress nights pay more; no volatility-regime filter on sleeve B",
+    "selection": "2006-07 to 2025-10, 4,845 nights: backwardation nights +6.0 bps (t 1.3), contango +3.7; overlay Sharpe 1.12 vs 1.08 unconditional",
+    "holdout": "overlay +3.1 bps vs +6.7",
+    "sizing": "",
+    "bot": "",
+    "provenance": "Simon and Campasano (2014) VIX futures term structure; practitioner contango/backwardation regime work"
+   },
+   {
+    "id": "S10",
+    "name": "Overnight premium across the ETF universe",
+    "family": "overnight drift",
+    "status": "tested",
+    "rule": "Close to next open, long, every session, net of cost. A leg joins sleeve B only if it passes the drift gates on selection, its holdout is positive, and the equal-weight book including it has a higher Sharpe than without ",
+    "gate": "no leg joins: GDX raises the book drawdown 19.5% to 22.1% for +0.06 Sharpe",
+    "verdict": "book stays QQQ + GLD",
+    "selection": "2004 to 2025-10: only GDX passes (Sharpe 1.07, t 4.7, +24% a year); XBI 1.33 but holdout -3.3 bps; SMH 0.82; TLT, IEF, DBC, USO negative overnight; EFA, EEM none",
+    "holdout": "GDX +3.3 bps",
+    "sizing": "",
+    "bot": "",
+    "provenance": "as S02"
+   },
+   {
+    "id": "S11",
+    "name": "Weekday filter on the overnight book",
+    "family": "calendar read",
+    "status": "tested",
+    "rule": "Overnight book returns grouped by the weekday of the entry close. A weekday is dropped only if its mean is negative with t <= -2 on selection and the holdout agrees in sign.",
+    "gate": "no weekday negative",
+    "verdict": "no filter",
+    "selection": "Tue-Wed +6.0 bps (t 4.1), Mon-Tue +5.3 (t 3.0), Fri-Mon +1.8 (t 0.9)",
+    "holdout": "signs flip",
+    "sizing": "",
+    "bot": "",
+    "provenance": "French (1980) weekend effect; Chen and Singal (2003)"
+   },
+   {
+    "id": "S12",
+    "name": "First-half-hour momentum in QQQ (H1 on ETF minute data)",
+    "family": "intraday momentum",
+    "status": "pre-registered",
+    "rule": "Direction = sign of the 09:30 to 10:00 return from the prior close; enter at 15:30; stop 1.0 x ATR14 on 15-minute bars; exit at the 15:58 close.",
+    "gate": "",
+    "verdict": "",
+    "selection": "",
+    "holdout": "",
+    "sizing": "",
+    "bot": "",
+    "provenance": "Gao, Han, Li, Zhou (2018); own Track C on NQ 15m"
+   },
+   {
+    "id": "S13",
+    "name": "Last-30-minutes momentum in SPY and QQQ",
+    "family": "intraday momentum",
+    "status": "pre-registered",
+    "rule": "At 15:30 ET take the sign of the day's first half-hour return (09:30 to 10:00, from the prior close); hold to 16:00. No stop (30-minute hold).",
+    "gate": "",
+    "verdict": "",
+    "selection": "",
+    "holdout": "",
+    "sizing": "",
+    "bot": "",
+    "provenance": "Gao, Han, Li, Zhou (2018) market intraday momentum: the first half-hour return predicts the last half-hour"
+   },
+   {
+    "id": "S14",
+    "name": "Opening gap continuation and fade in QQQ",
+    "family": "intraday",
+    "status": "pre-registered",
+    "rule": "Gap = 09:30 open versus the prior close in ATR units. Read both directions over the first hour and to the close, by gap size bucket, before any rule is proposed.",
+    "gate": "",
+    "verdict": "",
+    "selection": "",
+    "holdout": "",
+    "sizing": "",
+    "bot": "",
+    "provenance": "practitioner gap literature; the kit retired fades on NQ (#20), this is the ETF read"
+   },
+   {
+    "id": "S15",
+    "name": "Volatility-managed overnight book",
+    "family": "sizing",
+    "status": "tested",
+    "rule": "Size the overnight book each night by w = min(2, 10% / annualised realised vol of the book's last 20 nights), known at the prior exit.",
+    "gate": "not adopted: +0.09 < +0.10 (windows 10/40, caps 1.5/3 all +0.07 to +0.09)",
+    "verdict": "direction right, magnitude small; revisit with live fills",
+    "selection": "2004 to 2025-10, 5,241 nights: Sharpe 1.20 vs 1.11, +12.9% vs +10.1%, MDD 22.1% vs 19.5%, average weight 1.37",
+    "holdout": "1.12 vs 1.10",
+    "sizing": "",
+    "bot": "",
+    "provenance": "Moreira and Muir (2017) Volatility-Managed Portfolios"
+   },
+   {
+    "id": "S17",
+    "name": "Pre-holiday sessions",
+    "family": "calendar read",
+    "status": "tested",
+    "rule": "Sessions whose next trading day follows a missing weekday; full-day, intraday and into-holiday legs against other sessions.",
+    "gate": "nothing with |t| >= 2",
+    "verdict": "no rule",
+    "selection": "SPY 294 sessions: full day +9.6 bps (t 1.7) vs +4.5; night after -1.3 vs +4.2 (diff t -1.0); QQQ similar",
+    "holdout": "not opened",
+    "sizing": "",
+    "bot": "",
+    "provenance": "Ariel (1990) High stock returns before holidays"
+   }
+  ],
+  "stamp": "Updated 2026-10-19 \u00b7 entry #37 \u00b7 Mandate 3 \u00b7 strategy register, batch 1 \u00b7 sleeve C (RSI(2)) on paper",
   "status": {
    "now": {
     "title": "Mandate 2 ranked: H13 in QQQ is the only per-trade edge; the overnight premium is the robust carry (QQQ + GLD book); crypto has no retail-cost edge",
@@ -818,6 +1044,18 @@
   ],
   "log": [
    {
+    "when": "2026-10-19 \u00b7 #37",
+    "text": "Batch 1 results. One pass out of eleven pre-registered tests: Connors RSI(2) pullback in an uptrend (RSI(2) < 10 above the 200-day, exit above the 5-day). SPY +66 bps a trade on 253 trades since 1993 (CI +47 to +84, PF 3.12, t 6.8, walk-forward 3/3), QQQ +60 bps on 201 since 2000 (PF 2.23); holdout 12 and 11 trades at +90 and +77 bps; neighbours pass. It is sleeve C on paper from the next session (25% of equity per ETF, 15:57 ET run). Everything else failed its gate as written: trend filters halve drawdown but stay under Sharpe 1 (GTAA-5 0.66, SPY SMA 0.82 vs 0.63), dual momentum equals SPY, sector momentum 0.68 to 0.74 (fails Sharpe only), turn of the month is mostly the market's drift (excess t 1.0), the VIX overlay is rejected because stress nights pay more (+6.0 bps in backwardation), no ETF joins the overnight book (GDX passes alone but adds drawdown; bonds and commodities lose overnight), no weekday or pre-holiday filter, vol scaling +0.09 Sharpe (under the +0.10 line). Ledger: docs/strategy_ledger.md. Register: strategies/registry.json."
+   },
+   {
+    "when": "2026-10-19 \u00b7 #35 to #36",
+    "text": "Mandate 3 pre-registration. A deterministic multi-strategy system across stocks and ETFs: every strategy fully specified in a register before any test; 49 daily histories pulled (SPY 1993, sectors 1998, GLD 2004, S&P index 1927); gates rescaled (log drawdown 3x annual); batch 1 = Faber 10-month SMA, dual momentum, sector momentum, RSI(2), turn of the month, VIX overlay, 29-ETF overnight scan, weekday read; batch 1b = vol-managed sizing, pre-holiday read; batch 2 (Alpaca minute data) = pre-FOMC drift, first-half-hour and last-30-minutes momentum, opening gap. Per-sleeve lot ledger so the bots share one account; event and news attribution on every closed trade (research/attribute_trades.py)."
+   },
+   {
+    "when": "2026-10-19 \u00b7 #34",
+    "text": "Report and Pine script. The Sleeves A and B backtest report (a Claude Doc) carries the rule, windows, statistics and charts for both sleeves: cumulative R for sleeve A, growth of $1 overnight vs intraday vs buy-and-hold and the yearly book bars for sleeve B. pine/baller_sleeves_qqq.pine draws every sleeve A trigger and the overnight P&L on a QQQ 15m chart (chart-window stats only; the backtest is the report). Billboard fixed on the desk; live file pushed from both machines. No new numbers."
+   },
+   {
     "when": "2026-10-19 \u00b7 #33",
     "text": "Five markets ranked. Overnight drift, net of today's costs: QQQ +5.0 bps a night (t 4.5 on 6,694 nights, Sharpe 0.88, holdout 1.23; the day session earns nothing; buy-and-hold Sharpe 0.48), GLD +3.7 (t 3.4, Sharpe 0.75), SPY +3.0 (t 4.1, Sharpe 0.71); the QQQ + GLD book Sharpe 1.07 across 21 years and 1.05 in the holdout. IBIT and ETHA overnight were strong in 2024 to 2025 and negative in the last 12 months: failed. Crypto weekly momentum in spot fails on fees (62 switches a year); the 28-day filter only matches buy-and-hold with a smaller drawdown. BTC's best hours (16:00 to 18:00 ET, +7.7 bps, t 3.7) are worth less than one Alpaca round trip. Verdict: H13 in QQQ is the only per-trade edge; the overnight premium is the robust carry; nothing in ETH, nothing extra in SPY. Decision: paper book = sleeve A plus the overnight QQQ + GLD sleeve; overnight bot and schedules written and dry-run."
    },
@@ -1025,6 +1263,46 @@
     "rule": "Long BTC/ETH when the past 7-day return is positive, flat otherwise; 0.45% a switch; 28-day secondary.",
     "freq": "weekly",
     "status": "7-day fails (fees); 28-day only matches buy-and-hold with less drawdown; not adopted",
+    "level": "bad"
+   },
+   {
+    "id": "S03",
+    "name": "Trend filter, 10-month SMA (Faber GTAA)",
+    "rule": "On the last trading day of each month: hold the asset if its close is above the 10-month simple moving average of month-end closes, else cash at the T-bill yiel",
+    "freq": "",
+    "status": "failed: fail: Sharpe, t",
+    "level": "bad"
+   },
+   {
+    "id": "S04",
+    "name": "Dual momentum (GEM)",
+    "rule": "On the last trading day of each month compute 12-month returns. If SPY's 12-month return beats the T-bill 12-month return: hold SPY if it beats EFA over 12 mont",
+    "freq": "",
+    "status": "failed: fail: Sharpe, t, MDD",
+    "level": "bad"
+   },
+   {
+    "id": "S05",
+    "name": "Sector momentum, top 3 of 9 SPDRs",
+    "rule": "On the last trading day of each month rank the nine sectors by the 6-month return ending one month earlier (skip the last month). Hold the top three, one third ",
+    "freq": "",
+    "status": "failed: fail: Sharpe only",
+    "level": "bad"
+   },
+   {
+    "id": "S07",
+    "name": "Turn of the month",
+    "rule": "Buy at the close of the second-to-last trading day of the month; sell at the close of the third trading day of the next month.",
+    "freq": "",
+    "status": "failed: fail: excess over the unconditional drift",
+    "level": "bad"
+   },
+   {
+    "id": "S09",
+    "name": "VIX term-structure overlay on the overnight book",
+    "rule": "Hold the overnight book only when VIX < VIX3M at the close (contango). Skip the night in backwardation.",
+    "freq": "",
+    "status": "rejected: adoption rule not met",
     "level": "bad"
    }
   ],
@@ -1937,13 +2215,12 @@
    "micros": 1,
    "risk_usd": 500,
    "qqq": {
-    "as_of": "2026-10-16",
-    "price": 709.8,
-    "atr": 10.55,
-    "stop": 5.27,
-    "shares": 94,
-    "notional": 66721.0,
-    "gld_price": 382.01
+    "as_of": "2026-10-19",
+    "price": 718.36,
+    "atr": 10.86,
+    "stop": 5.43,
+    "shares": 92,
+    "notional": 66089.0
    },
    "rule": "Trade only if the 09:00 ET bar gives a conviction signal (|rs| above its 60-session median and the bar closes in the outer third of its range). Entry 10:00 open, half off at +1R, rest at the 16:00 close."
   }
@@ -1969,7 +2246,7 @@
    "positions": 0,
    "exposure": 0,
    "goal_usd": 5500,
-   "updated": "2026-10-19",
+   "updated": "2026-10-20",
    "note": "Sleeve A: H13 futures signal executed in QQQ (intraday). Sleeve B: overnight QQQ + GLD. Kill switch 15R on A ($7,500), 10% equity stop on B. Bots scheduled on the Windows PC.",
    "sleeves": [
     {
@@ -2009,7 +2286,7 @@
  "brokerage": {
   "snapshots": {
    "alpaca-paper": {
-    "synced": "2026-10-19 22:27 EDT",
+    "synced": "2026-10-20 00:00 EDT",
     "mode": "paper",
     "account_id": "alpaca-paper",
     "account": {
@@ -2199,6 +2476,7 @@
     }
    ]
   },
+  "rsi2": null,
   "sleeves": [
    {
     "id": "A",
@@ -2230,6 +2508,22 @@
     "review": "60 sessions",
     "log": "overnight_bot_log.csv",
     "bot": "overnight_bot.py"
+   },
+   {
+    "id": "C",
+    "name": "RSI(2) pullback in an uptrend",
+    "kind": "swing",
+    "symbols": [
+     "SPY",
+     "QQQ"
+    ],
+    "schedule": "15:57 run ET, every session (exits first, then entries)",
+    "rule": "Buy at the close when RSI(2) < 10 and the price is above the 200-day SMA; sell at the close when the price is above the 5-day SMA. Long only, one lot per ETF, held 3 to 4 sessions on average.",
+    "risk": "25% of equity notional per ETF, whole shares; both may be held at once",
+    "expect": "SPY +66 bps a trade (N 253 since 1993, PF 3.1, t 6.8), QQQ +60 bps (N 201 since 2000, PF 2.2); about 8 trades a year each; holdout +90 and +77 bps on 12 and 11 trades",
+    "review": "30 trades: EV > 0 and PF >= 1.5",
+    "log": "rsi2_bot_log.csv",
+    "bot": "rsi2_bot.py"
    }
   ]
  },
@@ -2238,12 +2532,6 @@
    "file": "btc_15m_to_2026-10-19.csv",
    "to": "2026-10-19",
    "mb": 0.48,
-   "modified": "2026-10-19 20:45"
-  },
-  {
-   "file": "btc_1d_max_to_2026-10-19.csv",
-   "to": "2026-10-19",
-   "mb": 0.44,
    "modified": "2026-10-19 20:45"
   },
   {
@@ -2257,12 +2545,6 @@
    "to": "2026-09-11",
    "mb": 0.46,
    "modified": "2026-10-14 09:27"
-  },
-  {
-   "file": "dxy_1d_max_to_2026-10-19.csv",
-   "to": "2026-10-19",
-   "mb": 1.4,
-   "modified": "2026-10-19 20:45"
   },
   {
    "file": "dxy_1h_2y_to_2026-09-11.csv",
@@ -2325,22 +2607,10 @@
    "modified": "2026-10-19 20:45"
   },
   {
-   "file": "eth_1d_max_to_2026-10-19.csv",
-   "to": "2026-10-19",
-   "mb": 0.35,
-   "modified": "2026-10-19 20:45"
-  },
-  {
    "file": "eth_1h_2y_to_2026-10-19.csv",
    "to": "2026-10-19",
    "mb": 1.75,
    "modified": "2026-10-19 20:45"
-  },
-  {
-   "file": "etha_1d_max_to_2026-10-19.csv",
-   "to": "2026-10-19",
-   "mb": 0.06,
-   "modified": "2026-10-19 20:46"
   },
   {
    "file": "etha_1h_2y_to_2026-10-19.csv",
@@ -2353,12 +2623,6 @@
    "to": "2026-09-11",
    "mb": 0.41,
    "modified": "2026-10-14 09:27"
-  },
-  {
-   "file": "gc_1d_max_to_2026-10-19.csv",
-   "to": "2026-10-19",
-   "mb": 0.59,
-   "modified": "2026-10-19 20:45"
   },
   {
    "file": "gc_1h_2y_to_2026-09-11.csv",
@@ -2391,22 +2655,10 @@
    "modified": "2026-10-14 09:27"
   },
   {
-   "file": "gld_1d_max_to_2026-10-19.csv",
-   "to": "2026-10-19",
-   "mb": 0.58,
-   "modified": "2026-10-19 20:45"
-  },
-  {
    "file": "gld_1h_2y_to_2026-10-19.csv",
    "to": "2026-10-19",
    "mb": 0.53,
    "modified": "2026-10-19 20:45"
-  },
-  {
-   "file": "ibit_1d_max_to_2026-10-19.csv",
-   "to": "2026-10-19",
-   "mb": 0.07,
-   "modified": "2026-10-19 20:46"
   },
   {
    "file": "ibit_1h_2y_to_2026-10-19.csv",
@@ -2449,12 +2701,6 @@
    "to": "2026-10-16",
    "mb": 0.42,
    "modified": "2026-10-16 18:48"
-  },
-  {
-   "file": "nq_1d_max_to_2026-10-19.csv",
-   "to": "2026-10-19",
-   "mb": 0.42,
-   "modified": "2026-10-19 19:36"
   },
   {
    "file": "nq_1h_2y_to_2026-09-11.csv",
@@ -2513,8 +2759,8 @@
   {
    "file": "qqq_1d_max_to_2026-10-19.csv",
    "to": "2026-10-19",
-   "mb": 0.72,
-   "modified": "2026-10-19 19:39"
+   "mb": 0.75,
+   "modified": "2026-10-19 23:38"
   },
   {
    "file": "qqq_1h_2y_to_2026-10-19.csv",
@@ -2543,20 +2789,14 @@
   {
    "file": "spy_1d_max_to_2026-10-19.csv",
    "to": "2026-10-19",
-   "mb": 0.83,
-   "modified": "2026-10-19 19:39"
+   "mb": 0.91,
+   "modified": "2026-10-19 23:38"
   },
   {
    "file": "spy_1h_2y_to_2026-10-19.csv",
    "to": "2026-10-19",
    "mb": 0.52,
    "modified": "2026-10-19 19:39"
-  },
-  {
-   "file": "vix_1d_max_to_2026-10-19.csv",
-   "to": "2026-10-19",
-   "mb": 0.93,
-   "modified": "2026-10-19 20:45"
   },
   {
    "file": "vix_1h_2y_to_2026-10-19.csv",

@@ -19,7 +19,7 @@
   "positions": 0,
   "exposure": 0,
   "goal_usd": 5500,
-  "updated": "2026-10-19",
+  "updated": "2026-10-20",
   "note": "Sleeve A: H13 futures signal executed in QQQ (intraday). Sleeve B: overnight QQQ + GLD. Kill switch 15R on A ($7,500), 10% equity stop on B. Bots scheduled on the Windows PC.",
   "sleeves": [
    {
