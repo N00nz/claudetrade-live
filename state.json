@@ -1,5 +1,5 @@
 {
- "generated": "2026-10-27 19:17 EDT",
+ "generated": "2026-10-27 19:35 EDT",
  "firm": {
   "name": "Baller Funds",
   "city": "New York",
@@ -10,6 +10,7 @@
    {
     "id": "S01",
     "name": "H13 relative momentum in QQQ (sleeve A)",
+    "desk": "equities",
     "family": "intraday momentum",
     "status": "paper",
     "rule": "rs = NQ 09:00 ET hourly bar return minus the ES return of the same bar. Trade only when |rs| >= the rolling 60-session median of |rs| (30-session warm-up). Long QQQ if rs > 0, short if rs < 0, market order at 10:00. Stop",
@@ -24,6 +25,7 @@
    {
     "id": "S02",
     "name": "Overnight QQQ + GLD book (sleeve B)",
+    "desk": "equities",
     "family": "overnight drift",
     "status": "paper",
     "rule": "Buy QQQ and GLD at 15:59 ET, 40% of equity each; sell both at 09:30:30 ET. No signal, no stop; 10% equity stop on the sleeve.",
@@ -38,6 +40,7 @@
    {
     "id": "S03",
     "name": "Trend filter, 10-month SMA (Faber GTAA)",
+    "desk": "allocation",
     "family": "time-series momentum / trend",
     "status": "failed",
     "rule": "On the last trading day of each month: hold the asset if its close is above the 10-month simple moving average of month-end closes, else cash at the T-bill yield. GTAA-5 holds 20% in each of the five assets. Single-asset",
@@ -52,6 +55,7 @@
    {
     "id": "S04",
     "name": "Dual momentum (GEM)",
+    "desk": "allocation",
     "family": "cross-sectional + absolute momentum",
     "status": "failed",
     "rule": "On the last trading day of each month compute 12-month returns. If SPY's 12-month return beats the T-bill 12-month return: hold SPY if it beats EFA over 12 months, else EFA. Otherwise hold AGG. 100% in one asset.",
@@ -66,6 +70,7 @@
    {
     "id": "S05",
     "name": "Sector momentum, top 3 of 9 SPDRs",
+    "desk": "equities",
     "family": "cross-sectional momentum",
     "status": "failed",
     "rule": "On the last trading day of each month rank the nine sectors by the 6-month return ending one month earlier (skip the last month). Hold the top three, one third each. Trend filter: all cash when SPY's month-end close is b",
@@ -80,6 +85,7 @@
    {
     "id": "S06",
     "name": "RSI(2) pullback in an uptrend (Connors)",
+    "desk": "equities",
     "family": "short-term mean reversion",
     "status": "paper",
     "rule": "Buy at the close when RSI(2) < 10 and the close is above the 200-day SMA. Sell at the close when the close is above the 5-day SMA. One position per ETF.",
@@ -94,6 +100,7 @@
    {
     "id": "S07",
     "name": "Turn of the month",
+    "desk": "equities",
     "family": "calendar",
     "status": "failed",
     "rule": "Buy at the close of the second-to-last trading day of the month; sell at the close of the third trading day of the next month.",
@@ -108,6 +115,7 @@
    {
     "id": "S08",
     "name": "Pre-FOMC announcement drift",
+    "desk": "equities",
     "family": "event",
     "status": "failed",
     "rule": "Long from 14:00 ET on the day before a scheduled FOMC statement to 14:00 ET on the statement day (before the release). Daily read: the day-before session and the statement-day overnight.",
@@ -122,6 +130,7 @@
    {
     "id": "S09",
     "name": "VIX term-structure overlay on the overnight book",
+    "desk": "volatility",
     "family": "regime filter",
     "status": "rejected",
     "rule": "Hold the overnight book only when VIX < VIX3M at the close (contango). Skip the night in backwardation.",
@@ -136,6 +145,7 @@
    {
     "id": "S10",
     "name": "Overnight premium across the ETF universe",
+    "desk": "equities",
     "family": "overnight drift",
     "status": "tested",
     "rule": "Close to next open, long, every session, net of cost. A leg joins sleeve B only if it passes the drift gates on selection, its holdout is positive, and the equal-weight book including it has a higher Sharpe than without ",
@@ -150,6 +160,7 @@
    {
     "id": "S11",
     "name": "Weekday filter on the overnight book",
+    "desk": "equities",
     "family": "calendar read",
     "status": "tested",
     "rule": "Overnight book returns grouped by the weekday of the entry close. A weekday is dropped only if its mean is negative with t <= -2 on selection and the holdout agrees in sign.",
@@ -164,6 +175,7 @@
    {
     "id": "S12",
     "name": "First-half-hour momentum in QQQ (H1 on ETF minute data)",
+    "desk": "equities",
     "family": "intraday momentum",
     "status": "failed",
     "rule": "Direction = sign of the 09:30 to 10:00 return from the prior close; enter at 15:30; stop 1.0 x ATR14 on 15-minute bars; exit at the 15:58 close.",
@@ -178,6 +190,7 @@
    {
     "id": "S13",
     "name": "Last-30-minutes momentum in SPY and QQQ",
+    "desk": "equities",
     "family": "intraday momentum",
     "status": "failed",
     "rule": "At 15:30 ET take the sign of the day's first half-hour return (09:30 to 10:00, from the prior close); hold to 16:00. No stop (30-minute hold).",
@@ -192,6 +205,7 @@
    {
     "id": "S14",
     "name": "Opening gap continuation and fade in QQQ",
+    "desk": "equities",
     "family": "intraday",
     "status": "tested",
     "rule": "Gap = 09:30 open versus the prior close in ATR units. Read both directions over the first hour and to the close, by gap size bucket, before any rule is proposed.",
@@ -206,6 +220,7 @@
    {
     "id": "S15",
     "name": "Volatility-managed overnight book",
+    "desk": "allocation",
     "family": "sizing",
     "status": "tested",
     "rule": "Size the overnight book each night by w = min(2, 10% / annualised realised vol of the book's last 20 nights), known at the prior exit.",
@@ -220,6 +235,7 @@
    {
     "id": "S17",
     "name": "Pre-holiday sessions",
+    "desk": "equities",
     "family": "calendar read",
     "status": "tested",
     "rule": "Sessions whose next trading day follows a missing weekday; full-day, intraday and into-holiday legs against other sessions.",
@@ -234,6 +250,7 @@
    {
     "id": "S10b",
     "name": "Overnight premium in 15 mega-cap stocks",
+    "desk": "equities",
     "family": "overnight drift",
     "status": "tested",
     "rule": "Close to next open, long, every session, net of cost; a leg joins sleeve B only under the S10 book rule.",
@@ -248,6 +265,7 @@
    {
     "id": "S06b",
     "name": "RSI(2) pullback in an uptrend, 15 mega-cap stocks",
+    "desk": "equities",
     "family": "short-term mean reversion",
     "status": "passed",
     "rule": "Buy at the close when RSI(2) < 10 and the close is above the 200-day SMA; sell at the close when the close is above the 5-day SMA. One lot per stock.",
@@ -258,9 +276,372 @@
     "sizing": "to be set at deployment: 10% of equity notional per stock, at most five open at once",
     "bot": "",
     "provenance": "as S06"
+   },
+   {
+    "id": "S20",
+    "name": "Commodity time-series momentum (TSMOM)",
+    "desk": "commodities",
+    "family": "trend",
+    "status": "paper",
+    "rule": "At each month's last close: sign of the 12-month return; each market sized to 10% ex-ante vol (60-day), capped at 1x; equal weight across markets; long or flat in the ETFs, long-short in the futures read.",
+    "gate": "fail: Sharpe alone; judged as a diversifier in S40",
+    "verdict": "sleeve D, admitted as a diversifier (corr 0.29 with B+C, book Sharpe 1.13 to 1.24)",
+    "selection": "2005-05 to 2025-10: 6-month Sharpe 0.87 (t 3.9, +3.6% a year at 0.22 average gross, log MDD 13.7%, 81% of years); 12-month 0.74; 9-month 0.78; futures-front read 0.15",
+    "holdout": "+3.5 to +4.1 bps a day, Sharpe 1.7",
+    "sizing": "1.0x of equity allocated to the sleeve; each ETF sized to 10% vol, capped at 1x, one sixth each; about 22% of equity exposed on average, 65% at most",
+    "bot": "research/trend_bot.py",
+    "provenance": "Moskowitz, Ooi, Pedersen (2012) Time series momentum; Hurst, Ooi, Pedersen (2017) a century of trend following"
+   },
+   {
+    "id": "S21",
+    "name": "Intraday drift in bonds and commodities",
+    "desk": "rates",
+    "family": "session drift",
+    "status": "failed",
+    "rule": "Buy the open, sell the close, every session, long only, net of cost.",
+    "gate": "fail",
+    "verdict": "low-vol assets cannot cover a round trip in either session",
+    "selection": "2004 to 2025-10: every leg negative net (TLT -0.8, IEF -1.4, LQD -2.5, HYG -3.7, DBC -6.6, USO -1.8, UNG -25.2, GLD -0.1, SLV -6.1 bps a session)",
+    "holdout": "mostly negative",
+    "sizing": "set at the allocation step",
+    "bot": "",
+    "provenance": "mirror of the overnight premium (Cooper, Cliff, Gulen 2008); own S10 finding that bonds and commodities lose overnight"
+   },
+   {
+    "id": "S23",
+    "name": "FX time-series momentum",
+    "desk": "fx",
+    "family": "trend",
+    "status": "failed",
+    "rule": "As S20 on the currency ETFs (long or flat) and on the seven majors in spot (long-short read).",
+    "gate": "fail",
+    "verdict": "FX trend is dead at this horizon and cost",
+    "selection": "currency ETFs Sharpe 0.08 (12-month), 0.40 (6-month); spot majors long-short -0.06 and -0.02 since 1997",
+    "holdout": "small",
+    "sizing": "",
+    "bot": "",
+    "provenance": "Moskowitz, Ooi, Pedersen (2012); Menkhoff, Sarno, Schmeling, Schrimpf (2012) currency momentum"
+   },
+   {
+    "id": "S26",
+    "name": "Rates time-series momentum",
+    "desk": "rates",
+    "family": "trend",
+    "status": "failed",
+    "rule": "As S20 on TLT and IEF (long or flat); ZN and ZB fronts as the long-short read.",
+    "gate": "fail",
+    "verdict": "",
+    "selection": "TLT+IEF Sharpe 0.55 (12-month), 0.45 (6-month); ZN ZB read 0.04",
+    "holdout": "-1.6 and -0.9 bps a day",
+    "sizing": "",
+    "bot": "",
+    "provenance": "Moskowitz, Ooi, Pedersen (2012)"
+   },
+   {
+    "id": "S28",
+    "name": "Crypto trend, spot BTC and ETH",
+    "desk": "crypto",
+    "family": "trend",
+    "status": "failed",
+    "rule": "At each Monday close: long if the 90-day return is positive, else flat; 0.25% a switch (Alpaca taker).",
+    "gate": "fail: holdout, drawdown",
+    "verdict": "trend trims buy-and-hold's drawdown, no edge over holding in the last 12 months",
+    "selection": "BTC 30-day Sharpe 1.08 (t 4.3, +45% a year, log MDD 73%), 90-day 0.91, 180-day 0.92; buy-and-hold 0.94 with 83% MDD; ETH 0.50 to 0.88",
+    "holdout": "all negative, -3.5 to -12.3 bps a day",
+    "sizing": "",
+    "bot": "",
+    "provenance": "time-series momentum applied to crypto (Liu, Tsyvinski 2021 risks and returns of cryptocurrency)"
+   },
+   {
+    "id": "S29",
+    "name": "BTC weekday read",
+    "desk": "crypto",
+    "family": "calendar read",
+    "status": "tested",
+    "rule": "Daily returns by weekday (UTC), selection and holdout.",
+    "gate": "no rule: the round trip at 0.25% a side is 50 bps",
+    "verdict": "real-looking, untradable at retail crypto fees",
+    "selection": "Monday (UTC) +50 bps (t 3.1) on 578 days; other days t < 2",
+    "holdout": "Monday +36 bps on 54",
+    "sizing": "",
+    "bot": "",
+    "provenance": "crypto seasonality literature (weekend effect)"
+   },
+   {
+    "id": "S30",
+    "name": "Short-volatility carry (SVXY in contango)",
+    "desk": "volatility",
+    "family": "carry",
+    "status": "failed",
+    "rule": "Hold SVXY when VIX < VIX3M and SPY is above its 200-day SMA at the prior close; else flat; daily.",
+    "gate": "fail: Sharpe, t; tail",
+    "verdict": "the filter halves the drawdown and leaves a one-day -26%",
+    "selection": "2011-10 to 2025-10, 82% in market: Sharpe 0.60, +25% a year, log MDD 52%, worst day -26.5% (2016-06-24), worst month -32%",
+    "holdout": "+6.2 bps, Sharpe 0.64",
+    "sizing": "",
+    "bot": "",
+    "provenance": "VIX futures roll yield (Simon, Campasano 2014); Volmageddon 2018-02-05 as the tail"
+   },
+   {
+    "id": "S31",
+    "name": "Long-short sector momentum",
+    "desk": "equities",
+    "family": "cross-sectional momentum",
+    "status": "failed",
+    "rule": "Monthly: long the top 3 and short the bottom 3 by the 6-1 return, one sixth each, 0.5% a year borrow on the shorts.",
+    "gate": "fail",
+    "verdict": "retired",
+    "selection": "1999 to 2025-10: Sharpe 0.11 (6-1), -0.06 (12-1)",
+    "holdout": "negative",
+    "sizing": "",
+    "bot": "",
+    "provenance": "Moskowitz and Grinblatt (1999)"
+   },
+   {
+    "id": "S40",
+    "name": "Allocation: $50,000 plan and leverage",
+    "desk": "allocation",
+    "family": "portfolio construction",
+    "status": "planned",
+    "rule": "Combine the daily returns of every passing sleeve at unit notional; choose notional per sleeve maximising expected log growth subject to a 20% log-drawdown budget on the bootstrap and Reg T (overnight gross <= 2x, intrad",
+    "gate": "feasible under the 15% log-drawdown budget and Reg T; neighbours within 9.7 to 11.1%",
+    "verdict": "adopted on paper 2026-10-27; review at 60 sessions",
+    "selection": "2005-06 to 2025-10: B 0.5x, C 0.75x, D 1.0x -> growth 11.1% a year, vol 9.3%, Sharpe 1.24, max drawdown 13.2%, worst year 2022 -7.2%; current book 8.0% with 15.9%",
+    "holdout": "+22.7% (Sharpe 1.75) vs +11.9% for the current book",
+    "sizing": "B 25% of equity per leg, C 37.5% per ETF, D 1.0x allocated (about 22% exposed on average), A $500 risk a trade",
+    "bot": "",
+    "provenance": "Kelly (1956) growth-optimal sizing at a fraction; Reg T margin"
    }
   ],
-  "stamp": "Updated 2026-10-20 \u00b7 entry #40 \u00b7 Mandate 3 \u00b7 batches 1 to 2 done \u00b7 sleeve C (RSI(2)) on paper",
+  "desks": [
+   {
+    "id": "equities",
+    "name": "Equities desk",
+    "blurb": "Equities desk: index ETFs and large stocks",
+    "lead": "Mattyp",
+    "n": 15,
+    "running": [
+     "S01",
+     "S02",
+     "S06"
+    ],
+    "testing": [],
+    "passed": [
+     "S06b"
+    ],
+    "failed": [
+     "S05",
+     "S07",
+     "S08",
+     "S12",
+     "S13",
+     "S31"
+    ],
+    "level": "good",
+    "latest": "S31 Long-short sector momentum",
+    "strategies": [
+     "S01",
+     "S02",
+     "S05",
+     "S06",
+     "S07",
+     "S08",
+     "S10",
+     "S11",
+     "S12",
+     "S13",
+     "S14",
+     "S17",
+     "S10b",
+     "S06b",
+     "S31"
+    ]
+   },
+   {
+    "id": "commodities",
+    "name": "Commodities desk",
+    "blurb": "Commodities desk: metals, energy, grains through ETFs; futures as reads",
+    "lead": "Andy",
+    "n": 1,
+    "running": [
+     "S20"
+    ],
+    "testing": [],
+    "passed": [],
+    "failed": [],
+    "level": "good",
+    "latest": "S20 Commodity time-series momentum (TSMOM)",
+    "strategies": [
+     "S20"
+    ]
+   },
+   {
+    "id": "fx",
+    "name": "FX desk",
+    "blurb": "FX desk: majors in spot as reads, currency ETFs for execution",
+    "lead": "Kai",
+    "n": 1,
+    "running": [],
+    "testing": [],
+    "passed": [],
+    "failed": [
+     "S23"
+    ],
+    "level": "bad",
+    "latest": "S23 FX time-series momentum",
+    "strategies": [
+     "S23"
+    ]
+   },
+   {
+    "id": "rates",
+    "name": "Rates desk",
+    "blurb": "Rates desk: Treasuries and credit ETFs",
+    "lead": "Pond",
+    "n": 2,
+    "running": [],
+    "testing": [],
+    "passed": [],
+    "failed": [
+     "S21",
+     "S26"
+    ],
+    "level": "bad",
+    "latest": "S26 Rates time-series momentum",
+    "strategies": [
+     "S21",
+     "S26"
+    ]
+   },
+   {
+    "id": "crypto",
+    "name": "Crypto desk",
+    "blurb": "Crypto desk: BTC, ETH spot on Alpaca",
+    "lead": "Nova",
+    "n": 2,
+    "running": [],
+    "testing": [],
+    "passed": [],
+    "failed": [
+     "S28"
+    ],
+    "level": "muted",
+    "latest": "S29 BTC weekday read",
+    "strategies": [
+     "S28",
+     "S29"
+    ]
+   },
+   {
+    "id": "volatility",
+    "name": "Volatility desk",
+    "blurb": "Volatility desk: VIX term structure, short-vol carry",
+    "lead": "Seppi",
+    "n": 2,
+    "running": [],
+    "testing": [],
+    "passed": [],
+    "failed": [
+     "S09",
+     "S30"
+    ],
+    "level": "bad",
+    "latest": "S30 Short-volatility carry (SVXY in contango)",
+    "strategies": [
+     "S09",
+     "S30"
+    ]
+   },
+   {
+    "id": "allocation",
+    "name": "Allocation desk",
+    "blurb": "Allocation desk: sizing, leverage, the $50k plan",
+    "lead": "Nanon",
+    "n": 4,
+    "running": [],
+    "testing": [],
+    "passed": [],
+    "failed": [
+     "S03",
+     "S04"
+    ],
+    "level": "muted",
+    "latest": "S40 Allocation: $50,000 plan and leverage",
+    "strategies": [
+     "S03",
+     "S04",
+     "S15",
+     "S40"
+    ]
+   }
+  ],
+  "allocation": {
+   "equity": 50000.0,
+   "chosen": {
+    "wb": 0.5,
+    "wc": 0.75,
+    "wd": 1,
+    "night_gross": 1.9,
+    "growth": 0.1106,
+    "vol": 0.0926,
+    "sharpe": 1.24,
+    "max_log_dd": 0.1414,
+    "max_dd_simple": 0.1319,
+    "worst_year": [
+     2022,
+     -0.0717
+    ],
+    "years_pos": 0.9,
+    "holdout_return": 0.2266,
+    "holdout_sharpe": 1.75
+   },
+   "dollars": {
+    "B_total": 25000,
+    "B_per_leg": 12500,
+    "C_total": 37500,
+    "C_per_etf": 18750,
+    "D_total": 50000,
+    "D_avg_exposure": 11000,
+    "A_risk_per_trade": 500.0,
+    "A_notional_at_today": 67500
+   },
+   "leverage": {
+    "overnight_gross_max": 1.9,
+    "intraday_gross_max": 2.75,
+    "reg_t_overnight_limit": 2.0,
+    "reg_t_intraday_limit": 4.0,
+    "margin_rate_assumed": 0.08
+   },
+   "budget": {
+    "book_log_dd": 0.15,
+    "sleeve_A_switch": "15R = $7,500",
+    "book_kill": "equity 15% under its peak -> flatten B, C, D"
+   },
+   "baseline_current": {
+    "wb": 0.8,
+    "wc": 0.0,
+    "wd": 0.0,
+    "growth": 0.0798,
+    "vol": 0.0732,
+    "sharpe": 1.13,
+    "max_log_dd": 0.1732,
+    "max_dd_simple": 0.1591,
+    "worst_year": [
+     2022,
+     -0.1168
+    ],
+    "years_pos": 0.86,
+    "holdout_return": 0.1188,
+    "holdout_sharpe": 1.01
+   },
+   "diversifier": {
+    "corr_D_vs_BC": 0.291,
+    "joins": true
+   },
+   "window": "2005-06-01 to 2026-10-27",
+   "generated": "2026-10-27 19:26"
+  },
+  "stamp": "Updated 2026-10-27 \u00b7 entry #43 \u00b7 Mandate 4 \u00b7 seven desks \u00b7 the $50k plan on paper (sleeves A to D)",
   "status": {
    "now": {
     "title": "Mandate 2 ranked: H13 in QQQ is the only per-trade edge; the overnight premium is the robust carry (QQQ + GLD book); crypto has no retail-cost edge",
@@ -1072,6 +1453,10 @@
   ],
   "log": [
    {
+    "when": "2026-10-27 \u00b7 #41 to #43",
+    "text": "The desks and the $50k plan. Mandate 4 widened the range: commodities, FX, rates, crypto and volatility desks each got pre-registered tests on execution-grade data (ETFs and spot; futures fronts as reads only). None passed alone: commodity trend on six ETFs is the one near miss (Sharpe 0.87, holdout 1.7), FX and rates trend are dead at our costs, bonds and commodities cannot cover a round trip in either session, crypto trend only trims buy-and-hold's drawdown and failed the last twelve months, short-vol carry keeps a one-day -26%, long-short sectors is noise. The allocation desk then sized the book: B 0.5x, C 0.75x, D 1.0x (commodity trend as a diversifier) with A at $500 risk a trade gives 11.1% a year at a 13.2% worst drawdown over 2005 to 2025, against 8.0% and 15.9% for the current book; overnight gross stays under 2x. The plan runs on paper from the next session; sleeve D rebalances monthly. The week before: the PC missed two exit sessions and ran the pre-ledger code; the overnight bot now adopts orphan lots."
+   },
+   {
     "when": "2026-10-20 \u00b7 #38 to #40",
     "text": "Batches 1c and 2. Stocks: the RSI(2) rule generalises across 15 mega-caps (pooled +63 bps a trade on 3,877 trades, every name positive, holdout +128 bps on 131); overnight premiums are strongest in GOOGL and AVGO but any list of today's winners is hindsight, so no stock leg joins sleeve B. Minute bars 2016 to 2026: the pre-FOMC drift is real over 30 years (+13.7 bps into the statement night vs +3.7) and reversed in the last eight meetings; sleeve B already holds those nights. First-half-hour momentum entered at 15:30 and the last-30-minutes rule both lose net of costs in SPY and QQQ: retired. Gaps: QQQ gap-downs beyond 1 ATR bounce +47 bps by 10:29 (t 3.8) but only five times a year. Events calendar built from primary sources (263 FOMC days since 1994, CPI, NFP, PCE); every closed bot trade now gets an event-and-news attribution row."
    },
@@ -1359,6 +1744,54 @@
     "rule": "At 15:30 ET take the sign of the day's first half-hour return (09:30 to 10:00, from the prior close); hold to 16:00. No stop (30-minute hold).",
     "freq": "",
     "status": "failed: fail: EV, PF",
+    "level": "bad"
+   },
+   {
+    "id": "S21",
+    "name": "Intraday drift in bonds and commodities",
+    "rule": "Buy the open, sell the close, every session, long only, net of cost.",
+    "freq": "",
+    "status": "failed: fail",
+    "level": "bad"
+   },
+   {
+    "id": "S23",
+    "name": "FX time-series momentum",
+    "rule": "As S20 on the currency ETFs (long or flat) and on the seven majors in spot (long-short read).",
+    "freq": "",
+    "status": "failed: fail",
+    "level": "bad"
+   },
+   {
+    "id": "S26",
+    "name": "Rates time-series momentum",
+    "rule": "As S20 on TLT and IEF (long or flat); ZN and ZB fronts as the long-short read.",
+    "freq": "",
+    "status": "failed: fail",
+    "level": "bad"
+   },
+   {
+    "id": "S28",
+    "name": "Crypto trend, spot BTC and ETH",
+    "rule": "At each Monday close: long if the 90-day return is positive, else flat; 0.25% a switch (Alpaca taker).",
+    "freq": "",
+    "status": "failed: fail: holdout, drawdown",
+    "level": "bad"
+   },
+   {
+    "id": "S30",
+    "name": "Short-volatility carry (SVXY in contango)",
+    "rule": "Hold SVXY when VIX < VIX3M and SPY is above its 200-day SMA at the prior close; else flat; daily.",
+    "freq": "",
+    "status": "failed: fail: Sharpe, t; tail",
+    "level": "bad"
+   },
+   {
+    "id": "S31",
+    "name": "Long-short sector momentum",
+    "rule": "Monthly: long the top 3 and short the bottom 3 by the 6-1 return, one sixth each, 0.5% a year borrow on the shorts.",
+    "freq": "",
+    "status": "failed: fail",
     "level": "bad"
    }
   ],
@@ -2289,18 +2722,18 @@
    "label": "Paper book \u00b7 sleeves A + B",
    "status": "active",
    "start_equity": 50000,
-   "equity": 49355.58,
+   "equity": 49345.79,
    "cash": 10153.88,
-   "buying_power": 150380.29,
+   "buying_power": 150352.87,
    "peak_equity": 50000.0,
-   "day_pl": 138.73,
+   "day_pl": 128.94,
    "kill_switch": 7500,
    "risk_per_trade": 500,
    "max_shares": 400,
    "day_trades_5d": 0,
    "pdt_min": 25000,
    "positions": 2,
-   "exposure": 39201.7,
+   "exposure": 39191.91,
    "goal_usd": 5500,
    "updated": "2026-10-27",
    "note": "Sleeve A: H13 futures signal executed in QQQ (intraday). Sleeve B: overnight QQQ + GLD. Kill switch 15R on A ($7,500), 10% equity stop on B. Bots scheduled on the Windows PC.",
@@ -2342,18 +2775,18 @@
  "brokerage": {
   "snapshots": {
    "alpaca-paper": {
-    "synced": "2026-10-27 19:17 EDT",
+    "synced": "2026-10-27 19:35 EDT",
     "mode": "paper",
     "account_id": "alpaca-paper",
     "account": {
      "status": "active",
-     "equity": 49355.58,
+     "equity": 49345.79,
      "cash": 10153.88,
-     "buying_power": 150380.29,
+     "buying_power": 150352.87,
      "daytrading_buying_power": null,
      "multiplier": 4.0,
      "last_equity": 49216.85,
-     "day_pl": 138.73,
+     "day_pl": 128.94,
      "pattern_day_trader": false,
      "daytrade_count": 0,
      "shorting_enabled": true,
@@ -2365,20 +2798,20 @@
       "side": "long",
       "qty": 53.0,
       "avg_entry": 372.28434,
-      "price": 372.2,
-      "market_value": 19726.6,
-      "unrealized_pl": -4.47002,
-      "unrealized_plpc": -0.00023
+      "price": 372.0,
+      "market_value": 19716.0,
+      "unrealized_pl": -15.07002,
+      "unrealized_plpc": -0.00076
      },
      {
       "symbol": "QQQ",
       "side": "long",
       "qty": 27.0,
       "avg_entry": 721.48,
-      "price": 721.3001,
-      "market_value": 19475.1027,
-      "unrealized_pl": -4.8573,
-      "unrealized_plpc": -0.00025
+      "price": 721.33,
+      "market_value": 19475.91,
+      "unrealized_pl": -4.05,
+      "unrealized_plpc": -0.00021
      }
     ],
     "open_orders": [],
@@ -2546,7 +2979,7 @@
       "order_class": "simple"
      }
     ],
-    "exposure": 39201.7,
+    "exposure": 39191.91,
     "history": [
      {
       "date": "2026-10-12",
@@ -2672,6 +3105,92 @@
        "px_GLD": null
       }
      ]
+    },
+    "trend": {
+     "last_run": "2026-10-27 19:28:28",
+     "last_action": "hold",
+     "last_result": "dry-run",
+     "runs": 6,
+     "recent": [
+      {
+       "time": "2026-10-27 19:28:28",
+       "symbol": "GLD",
+       "action": "hold",
+       "result": "dry-run",
+       "target": 0,
+       "held": 0,
+       "px": 372.305,
+       "mom": -0.1175724681,
+       "vol": 0.2409806636,
+       "qty": null,
+       "paper": null
+      },
+      {
+       "time": "2026-10-27 19:28:28",
+       "symbol": "SLV",
+       "action": "hold",
+       "result": "dry-run",
+       "target": 0,
+       "held": 0,
+       "px": 49.11,
+       "mom": -0.2581570997,
+       "vol": 0.3944507504,
+       "qty": null,
+       "paper": null
+      },
+      {
+       "time": "2026-10-27 19:28:28",
+       "symbol": "USO",
+       "action": "buy",
+       "result": "dry-run",
+       "target": 12,
+       "held": 0,
+       "px": 163.625,
+       "mom": 0.1720988539,
+       "vol": 0.4057627567,
+       "qty": 12.0,
+       "paper": true
+      },
+      {
+       "time": "2026-10-27 19:28:28",
+       "symbol": "UNG",
+       "action": "hold",
+       "result": "dry-run",
+       "target": 0,
+       "held": 0,
+       "px": 9.65,
+       "mom": -0.0658276864,
+       "vol": 0.3693928132,
+       "qty": null,
+       "paper": null
+      },
+      {
+       "time": "2026-10-27 19:28:28",
+       "symbol": "CPER",
+       "action": "buy",
+       "result": "dry-run",
+       "target": 92,
+       "held": 0,
+       "px": 40.05,
+       "mom": 0.1051324503,
+       "vol": 0.2249231372,
+       "qty": 92.0,
+       "paper": true
+      },
+      {
+       "time": "2026-10-27 19:28:28",
+       "symbol": "DBA",
+       "action": "hold",
+       "result": "dry-run",
+       "target": 0,
+       "held": 0,
+       "px": 27.4,
+       "mom": -0.0200286123,
+       "vol": 0.1168232138,
+       "qty": null,
+       "paper": null
+      }
+     ]
     }
    }
   },
@@ -2734,6 +3253,92 @@
    ]
   },
   "rsi2": null,
+  "trend": {
+   "last_run": "2026-10-27 19:28:28",
+   "last_action": "hold",
+   "last_result": "dry-run",
+   "runs": 6,
+   "recent": [
+    {
+     "time": "2026-10-27 19:28:28",
+     "symbol": "GLD",
+     "action": "hold",
+     "result": "dry-run",
+     "target": 0,
+     "held": 0,
+     "px": 372.305,
+     "mom": -0.1175724681,
+     "vol": 0.2409806636,
+     "qty": null,
+     "paper": null
+    },
+    {
+     "time": "2026-10-27 19:28:28",
+     "symbol": "SLV",
+     "action": "hold",
+     "result": "dry-run",
+     "target": 0,
+     "held": 0,
+     "px": 49.11,
+     "mom": -0.2581570997,
+     "vol": 0.3944507504,
+     "qty": null,
+     "paper": null
+    },
+    {
+     "time": "2026-10-27 19:28:28",
+     "symbol": "USO",
+     "action": "buy",
+     "result": "dry-run",
+     "target": 12,
+     "held": 0,
+     "px": 163.625,
+     "mom": 0.1720988539,
+     "vol": 0.4057627567,
+     "qty": 12.0,
+     "paper": true
+    },
+    {
+     "time": "2026-10-27 19:28:28",
+     "symbol": "UNG",
+     "action": "hold",
+     "result": "dry-run",
+     "target": 0,
+     "held": 0,
+     "px": 9.65,
+     "mom": -0.0658276864,
+     "vol": 0.3693928132,
+     "qty": null,
+     "paper": null
+    },
+    {
+     "time": "2026-10-27 19:28:28",
+     "symbol": "CPER",
+     "action": "buy",
+     "result": "dry-run",
+     "target": 92,
+     "held": 0,
+     "px": 40.05,
+     "mom": 0.1051324503,
+     "vol": 0.2249231372,
+     "qty": 92.0,
+     "paper": true
+    },
+    {
+     "time": "2026-10-27 19:28:28",
+     "symbol": "DBA",
+     "action": "hold",
+     "result": "dry-run",
+     "target": 0,
+     "held": 0,
+     "px": 27.4,
+     "mom": -0.0200286123,
+     "vol": 0.1168232138,
+     "qty": null,
+     "paper": null
+    }
+   ]
+  },
   "sleeves": [
    {
     "id": "A",
@@ -2760,7 +3365,7 @@
     ],
     "schedule": "15:59 buy \u00b7 09:30:30 sell ET, every session",
     "rule": "Hold QQQ and GLD only while the US cash market is closed: buy at 15:59, sell at the next open. The return of both accrues overnight; the day session earns nothing.",
-    "risk": "40% of equity in each, 10% equity stop on the sleeve",
+    "risk": "25% of equity in each leg (0.5x, S40 plan), 10% equity stop on the sleeve",
     "expect": "QQQ +5.0 bps a night (t 4.5, 6,694 nights since 1999), GLD +3.7 (t 3.4, since 2004); book Sharpe 1.07 since 2004, holdout 1.05; about +7.7% a year at 80% allocation",
     "review": "60 sessions",
     "log": "overnight_bot_log.csv",
@@ -2776,11 +3381,31 @@
     ],
     "schedule": "15:57 run ET, every session (exits first, then entries)",
     "rule": "Buy at the close when RSI(2) < 10 and the price is above the 200-day SMA; sell at the close when the price is above the 5-day SMA. Long only, one lot per ETF, held 3 to 4 sessions on average.",
-    "risk": "25% of equity notional per ETF, whole shares; both may be held at once",
+    "risk": "37.5% of equity notional per ETF (0.75x, S40 plan), whole shares; both may be held at once",
     "expect": "SPY +66 bps a trade (N 253 since 1993, PF 3.1, t 6.8), QQQ +60 bps (N 201 since 2000, PF 2.2); about 8 trades a year each; holdout +90 and +77 bps on 12 and 11 trades",
     "review": "30 trades: EV > 0 and PF >= 1.5",
     "log": "rsi2_bot_log.csv",
     "bot": "rsi2_bot.py"
+   },
+   {
+    "id": "D",
+    "name": "Commodity trend (TSMOM)",
+    "kind": "monthly",
+    "symbols": [
+     "GLD",
+     "SLV",
+     "USO",
+     "UNG",
+     "CPER",
+     "DBA"
+    ],
+    "schedule": "15:56 ET on the last session of each month",
+    "rule": "Long an ETF when its 6-month return is positive, sized to 10% vol (60-day) and capped at 1x, one sixth each; otherwise flat. Rebalanced monthly; held through the day and night.",
+    "risk": "1.0x of equity allocated, about 22% exposed on average, 65% at most (S40 plan)",
+    "expect": "Sharpe 0.87 alone (2005 to 2025, +3.6% a year at 0.22 gross); joins the book as a diversifier: corr 0.29 with B+C, book Sharpe 1.13 to 1.24; holdout Sharpe 1.7",
+    "review": "12 rebalances",
+    "log": "trend_bot_log.csv",
+    "bot": "trend_bot.py"
    }
   ]
  },

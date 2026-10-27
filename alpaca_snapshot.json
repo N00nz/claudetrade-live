@@ -1,16 +1,16 @@
 {
- "synced": "2026-10-27 19:17 EDT",
+ "synced": "2026-10-27 19:35 EDT",
  "mode": "paper",
  "account_id": "alpaca-paper",
  "account": {
   "status": "active",
-  "equity": 49355.58,
+  "equity": 49345.79,
   "cash": 10153.88,
-  "buying_power": 150380.29,
+  "buying_power": 150352.87,
   "daytrading_buying_power": null,
   "multiplier": 4.0,
   "last_equity": 49216.85,
-  "day_pl": 138.73,
+  "day_pl": 128.94,
   "pattern_day_trader": false,
   "daytrade_count": 0,
   "shorting_enabled": true,
@@ -22,20 +22,20 @@
    "side": "long",
    "qty": 53.0,
    "avg_entry": 372.28434,
-   "price": 372.2,
-   "market_value": 19726.6,
-   "unrealized_pl": -4.47002,
-   "unrealized_plpc": -0.00023
+   "price": 372.0,
+   "market_value": 19716.0,
+   "unrealized_pl": -15.07002,
+   "unrealized_plpc": -0.00076
   },
   {
    "symbol": "QQQ",
    "side": "long",
    "qty": 27.0,
    "avg_entry": 721.48,
-   "price": 721.3001,
-   "market_value": 19475.1027,
-   "unrealized_pl": -4.8573,
-   "unrealized_plpc": -0.00025
+   "price": 721.33,
+   "market_value": 19475.91,
+   "unrealized_pl": -4.05,
+   "unrealized_plpc": -0.00021
   }
  ],
  "open_orders": [],
@@ -203,7 +203,7 @@
    "order_class": "simple"
   }
  ],
- "exposure": 39201.7,
+ "exposure": 39191.91,
  "history": [
   {
    "date": "2026-10-12",
@@ -327,6 +327,92 @@
     "qty_GLD": null,
     "px_QQQ": null,
     "px_GLD": null
+   }
+  ]
+ },
+ "trend": {
+  "last_run": "2026-10-27 19:28:28",
+  "last_action": "hold",
+  "last_result": "dry-run",
+  "runs": 6,
+  "recent": [
+   {
+    "time": "2026-10-27 19:28:28",
+    "symbol": "GLD",
+    "action": "hold",
+    "result": "dry-run",
+    "target": 0,
+    "held": 0,
+    "px": 372.305,
+    "mom": -0.1175724681,
+    "vol": 0.2409806636,
+    "qty": null,
+    "paper": null
+   },
+   {
+    "time": "2026-10-27 19:28:28",
+    "symbol": "SLV",
+    "action": "hold",
+    "result": "dry-run",
+    "target": 0,
+    "held": 0,
+    "px": 49.11,
+    "mom": -0.2581570997,
+    "vol": 0.3944507504,
+    "qty": null,
+    "paper": null
+   },
+   {
+    "time": "2026-10-27 19:28:28",
+    "symbol": "USO",
+    "action": "buy",
+    "result": "dry-run",
+    "target": 12,
+    "held": 0,
+    "px": 163.625,
+    "mom": 0.1720988539,
+    "vol": 0.4057627567,
+    "qty": 12.0,
+    "paper": true
+   },
+   {
+    "time": "2026-10-27 19:28:28",
+    "symbol": "UNG",
+    "action": "hold",
+    "result": "dry-run",
+    "target": 0,
+    "held": 0,
+    "px": 9.65,
+    "mom": -0.0658276864,
+    "vol": 0.3693928132,
+    "qty": null,
+    "paper": null
+   },
+   {
+    "time": "2026-10-27 19:28:28",
+    "symbol": "CPER",
+    "action": "buy",
+    "result": "dry-run",
+    "target": 92,
+    "held": 0,
+    "px": 40.05,
+    "mom": 0.1051324503,
+    "vol": 0.2249231372,
+    "qty": 92.0,
+    "paper": true
+   },
+   {
+    "time": "2026-10-27 19:28:28",
+    "symbol": "DBA",
+    "action": "hold",
+    "result": "dry-run",
+    "target": 0,
+    "held": 0,
+    "px": 27.4,
+    "mom": -0.0200286123,
+    "vol": 0.1168232138,
+    "qty": null,
+    "paper": null
    }
   ]
  }
