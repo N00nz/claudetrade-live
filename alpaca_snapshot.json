@@ -1,16 +1,16 @@
 {
- "synced": "2026-10-20 19:00 EDT",
+ "synced": "2026-10-27 19:17 EDT",
  "mode": "paper",
  "account_id": "alpaca-paper",
  "account": {
   "status": "active",
-  "equity": 49668.16,
-  "cash": 10510.17,
-  "buying_power": 151683.05,
+  "equity": 49355.58,
+  "cash": 10153.88,
+  "buying_power": 150380.29,
   "daytrading_buying_power": null,
   "multiplier": 4.0,
-  "last_equity": 50000.0,
-  "day_pl": -331.84,
+  "last_equity": 49216.85,
+  "day_pl": 138.73,
   "pattern_day_trader": false,
   "daytrade_count": 0,
   "shorting_enabled": true,
@@ -20,26 +20,134 @@
   {
    "symbol": "GLD",
    "side": "long",
-   "qty": 52.0,
-   "avg_entry": 377.67327,
-   "price": 377.65,
-   "market_value": 19637.8,
-   "unrealized_pl": -1.21004,
-   "unrealized_plpc": -6e-05
+   "qty": 53.0,
+   "avg_entry": 372.28434,
+   "price": 372.2,
+   "market_value": 19726.6,
+   "unrealized_pl": -4.47002,
+   "unrealized_plpc": -0.00023
   },
   {
    "symbol": "QQQ",
    "side": "long",
    "qty": 27.0,
-   "avg_entry": 716.97,
-   "price": 722.97,
-   "market_value": 19520.19,
-   "unrealized_pl": 162.0,
-   "unrealized_plpc": 0.00837
+   "avg_entry": 721.48,
+   "price": 721.3001,
+   "market_value": 19475.1027,
+   "unrealized_pl": -4.8573,
+   "unrealized_plpc": -0.00025
   }
  ],
  "open_orders": [],
  "fills": [
+  {
+   "time": "2026-10-27 19:59",
+   "symbol": "GLD",
+   "side": "buy",
+   "qty": 53.0,
+   "price": 372.28434,
+   "type": "market",
+   "order_class": "simple"
+  },
+  {
+   "time": "2026-10-27 19:58",
+   "symbol": "QQQ",
+   "side": "buy",
+   "qty": 27.0,
+   "price": 721.48,
+   "type": "market",
+   "order_class": "simple"
+  },
+  {
+   "time": "2026-10-27 13:33",
+   "symbol": "GLD",
+   "side": "sell",
+   "qty": 53.0,
+   "price": 368.903962,
+   "type": "market",
+   "order_class": "simple"
+  },
+  {
+   "time": "2026-10-27 13:33",
+   "symbol": "QQQ",
+   "side": "sell",
+   "qty": 27.0,
+   "price": 715.555926,
+   "type": "market",
+   "order_class": "simple"
+  },
+  {
+   "time": "2026-10-22 19:59",
+   "symbol": "GLD",
+   "side": "buy",
+   "qty": 53.0,
+   "price": 368.935661,
+   "type": "market",
+   "order_class": "simple"
+  },
+  {
+   "time": "2026-10-22 19:59",
+   "symbol": "QQQ",
+   "side": "buy",
+   "qty": 27.0,
+   "price": 704.25,
+   "type": "market",
+   "order_class": "simple"
+  },
+  {
+   "time": "2026-10-22 13:33",
+   "symbol": "GLD",
+   "side": "sell",
+   "qty": 52.0,
+   "price": 373.171923,
+   "type": "market",
+   "order_class": "simple"
+  },
+  {
+   "time": "2026-10-22 13:32",
+   "symbol": "QQQ",
+   "side": "sell",
+   "qty": 27.0,
+   "price": 713.23,
+   "type": "market",
+   "order_class": "simple"
+  },
+  {
+   "time": "2026-10-21 19:59",
+   "symbol": "GLD",
+   "side": "buy",
+   "qty": 52.0,
+   "price": 378.922885,
+   "type": "market",
+   "order_class": "simple"
+  },
+  {
+   "time": "2026-10-21 19:59",
+   "symbol": "QQQ",
+   "side": "buy",
+   "qty": 27.0,
+   "price": 725.677037,
+   "type": "market",
+   "order_class": "simple"
+  },
+  {
+   "time": "2026-10-21 13:34",
+   "symbol": "GLD",
+   "side": "sell",
+   "qty": 52.0,
+   "price": 378.950961,
+   "type": "market",
+   "order_class": "simple"
+  },
+  {
+   "time": "2026-10-21 13:33",
+   "symbol": "QQQ",
+   "side": "sell",
+   "qty": 27.0,
+   "price": 721.623333,
+   "type": "market",
+   "order_class": "simple"
+  },
   {
    "time": "2026-10-20 19:59",
    "symbol": "GLD",
@@ -95,7 +203,7 @@
    "order_class": "simple"
   }
  ],
- "exposure": 39157.99,
+ "exposure": 39201.7,
  "history": [
   {
    "date": "2026-10-12",
@@ -132,6 +240,36 @@
    "equity": 50000.0,
    "pl": 0.0,
    "pl_pct": 0.0
+  },
+  {
+   "date": "2026-10-20",
+   "equity": 49522.61,
+   "pl": -477.39,
+   "pl_pct": -0.95
+  },
+  {
+   "date": "2026-10-21",
+   "equity": 49685.79,
+   "pl": 163.18,
+   "pl_pct": 0.33
+  },
+  {
+   "date": "2026-10-22",
+   "equity": 49070.68,
+   "pl": -615.11,
+   "pl_pct": -1.24
+  },
+  {
+   "date": "2026-10-23",
+   "equity": 48942.12,
+   "pl": -128.56,
+   "pl_pct": -0.26
+  },
+  {
+   "date": "2026-10-26",
+   "equity": 49216.85,
+   "pl": 274.73,
+   "pl_pct": 0.56
   }
  ],
  "bot": {
